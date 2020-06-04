@@ -1,5 +1,8 @@
 import { expect } from 'chai'
 import DomUpdates from '../src/dom-updates'
+const chai = require('chai')
+let spies = require('chai-spies')
+chai.use(spies)
 
 describe('DomUpdates', () => {
   let domUpdates
