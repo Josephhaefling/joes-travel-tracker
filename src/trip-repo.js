@@ -1,10 +1,10 @@
 class TripRepo {
-  constructor() {
-    this.trips = []
+  constructor(tripsData) {
+    this.trips = tripsData
   }
 
-  getTrips() {
-
+  getTripsByUserID(userID) {
+    return this.trips.filter(trip => trip.userID === userID)
   }
 }
 

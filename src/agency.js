@@ -1,9 +1,9 @@
 class Agency {
-  constructor() {
+  constructor(travelersRepo) {
   this.id = 0
-  this.name = 'Prestige Worldwide'
+  this.name = 'NightHawk'
   this.requestedTrips = []
-  this.userRepo = []
+  this.travelersRepo = travelersRepo
   }
 
   getRequestedTrips() {

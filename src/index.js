@@ -6,6 +6,7 @@ import './css/base.scss'
 import TravelersRepo from '../src/travelers-repo'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
+import Agency from '../src/agency'
 import './images/turing-logo.png'
 import './images/planet-earth.jpg'
 
@@ -13,7 +14,7 @@ const loginButton = document.querySelector('.login-button')
 let domUpdates
 
 loginButton.addEventListener('click', () => {
-  verifyUserInfo()
+  determineUserType()
 })
 
 fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers')
@@ -30,16 +31,54 @@ const createDomUpdates = (travelersRepo) => {
   domUpdates = new DomUpdates(travelersRepo)
 }
 
-const verifyUserInfo = () => {
-  const travelersRepo = domUpdates.travelersRepo
+const determineUserType = () => {
   const userName = document.querySelector('.user-name')
+  if (userName) {
+    userName.value === 'agency' ? createAgency() : parseUserId(userName)
+  } else {
+    domUpdates.displayLoginError('user-name')
+  }
+}
+
+const parseUserId = (userName) => {
+  const travelersRepo = domUpdates.travelersRepo
   const lengthOfUserName = userName.value.length
   const userIDToVerify = parseInt(userName.value.slice(8, lengthOfUserName))
+  getUserInfo(userIDToVerify, travelersRepo)
+}
+
+const getUserInfo = (userIDToVerify, travelersRepo) => {
+  const userName = document.querySelector('.user-name')
   const verifiedTraveler = travelersRepo.getUserById(userIDToVerify)
-  createUser(verifiedTraveler)
+  verifyUserName(verifiedTraveler)
+}
+
+
+const verifyUserName = (verifiedTraveler) => {
+  if (verifiedTraveler) {
+    verifyPassword() === true ? createUser(verifiedTraveler) : domUpdates.displayLoginError('password')
+  } else {
+    domUpdates.displayLoginError('user-name')
+  }
 }
 
 const createUser = (travelerInfo) => {
   const currentUser = new User(travelerInfo)
-  console.log(currentUser);
+  domUpdates.displayAppropriateUser('traveler', currentUser)
+}
+
+const createAgency = () => {
+  if (verifyPassword() === true) {
+    const agency = new Agency()
+    domUpdates.displayAppropriateUser('agency', agency)
+  } else {
+    domUpdates.displayLoginError('password')
+  }
+}
+
+const verifyPassword = () => {
+  const password = document.querySelector('.password')
+  if(password) {
+  return password.value === 'travel2020' ? true : false;
+  }
 }
