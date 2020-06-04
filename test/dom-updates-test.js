@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
 import TestData from '../src/test-data'
+
 const chai = require('chai')
 let spies = require('chai-spies')
 chai.use(spies)
