@@ -1,6 +1,6 @@
 class DomUpdates {
-  constructor() {
+  constructor(travelersRepo) {
+    this.travelersRepo = travelersRepo
   }
-
 }
 module.exports = DomUpdates

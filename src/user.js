@@ -1,10 +1,10 @@
 class User {
-  constructor() {
-    // this.id = userInfo.id
-    // this.name = userInfo.name
-    // this.travelType = userInfo.travelType
-    // this.isOnTrip = false
-    // this.userTrips = []
+  constructor(userInfo) {
+    this.id = userInfo.id
+    this.name = userInfo.name
+    this.travelType = userInfo.travelerType
+    this.isOnTrip = false
+    this.userTrips = []
   }
 
   getTotalSpent() {

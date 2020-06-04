@@ -9,6 +9,7 @@ describe('DomUpdates', () => {
 
   beforeEach(() => {
     domUpdates = new DomUpdates()
+    global.domUpdates
   })
 
   it('should be a function', () => {
