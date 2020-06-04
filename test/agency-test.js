@@ -7,7 +7,8 @@ describe('Agency', () => {
   beforeEach(() => {
     agency = new Agency()
   })
-  it.only('should be a function', () => {
+  
+  it('should be a function', () => {
     expect(Agency).to.be.a('function')
   })
 })
