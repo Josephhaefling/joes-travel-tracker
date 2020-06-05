@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
+import TripRepo from '../src/trip-repo'
 import TestData from '../src/test-data'
 
 const chai = require('chai')
@@ -10,12 +11,15 @@ chai.use(spies)
 describe('DomUpdates', () => {
   let domUpdates
   let user
-  let sampleUsers = TestData.sampleUsers
+  let tripRepo
+  let travelersRepo = TestData.sampleUsers
 
   beforeEach(() => {
     global.domUpdates
-    user = new User(sampleUsers[2])
-    domUpdates = new DomUpdates(sampleUsers)
+    global.tripRepo
+    tripRepo = new TripRepo(TestData.sampleTrips)
+    user = new User(travelersRepo[2])
+    domUpdates = new DomUpdates(travelersRepo)
   })
 
 
@@ -41,5 +45,12 @@ describe('DomUpdates', () => {
     chai.spy.on(domUpdates, 'displayLoginError', () => {})
     domUpdates.displayLoginError()
     expect(domUpdates.displayLoginError).to.have.been.called(1)
+  })
+
+  it('should be run getTripsByUserID once', () => {
+    chai.spy.on(tripRepo, 'getTripsByUserID', () => {})
+    tripRepo.getTripsByUserID(3)
+    expect(tripRepo.getTripsByUserID).to.have.been.called(1)
+    expect(tripRepo.getTripsByUserID).to.have.been.called.with(3)
   })
 })

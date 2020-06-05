@@ -5,3 +5,13 @@
   display: block;
   font-size: 18px;
 }
+
+@mixin tripsContainer($height, $width) {
+  height: $height;
+  width: $width;
+  border: 1px solid red;
+  background-color: rgba(92, 89, 48, .7);
+  border-radius: 5px;
+  display: block;
+  font-size: 18px;
+}

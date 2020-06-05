@@ -4,12 +4,14 @@
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss'
 import TravelersRepo from '../src/travelers-repo'
-import TripsRepo from '../src/travelers-repo'
+import TripsRepo from '../src/trip-repo'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
 import Agency from '../src/agency'
 import './images/turing-logo.png'
 import './images/planet-earth.jpg'
+
+const todaysDate = '2021/01/01'
 
 const loginButton = document.querySelector('.login-button')
 let domUpdates
@@ -45,7 +47,7 @@ const createTripsRepo = (tripsData) => {
 }
 
 const createDomUpdates = (travelersRepo, tripsRepo) => {
-  domUpdates = new DomUpdates(travelersRepo, tripsRepo)
+  domUpdates = new DomUpdates(travelersRepo, tripsRepo, todaysDate)
 }
 
 const determineUserType = () => {
