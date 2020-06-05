@@ -4,6 +4,7 @@
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss'
 import TravelersRepo from '../src/travelers-repo'
+import TripsRepo from '../src/travelers-repo'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
 import Agency from '../src/agency'
@@ -17,18 +18,34 @@ loginButton.addEventListener('click', () => {
   determineUserType()
 })
 
-fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers')
-.then(response => response.json())
-.then(data => createTravelersRepo(data.travelers))
+Promise.all([
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers').then(response => response.json()),
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips').then(response => response.json()),
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/destinations/destinations').then(response => response.json())
+])
+.then(data => createDataSets(data[0], data[1], data[2]))
 .catch(err => console.error(err.message))
+
+
+const createDataSets = (travelersData, tripsData, destinationsData) => {
+  const travelersRepo = createTravelersRepo(travelersData.travelers);
+  const tripsRepo = createTripsRepo(tripsData.trips);
+  const destinations = destinationsData
+  createDomUpdates(travelersRepo, tripsRepo)
+}
 
 const createTravelersRepo = (travelersData) => {
   const travelersRepo = new TravelersRepo(travelersData)
-  createDomUpdates(travelersRepo)
+  return travelersRepo
 }
 
-const createDomUpdates = (travelersRepo) => {
-  domUpdates = new DomUpdates(travelersRepo)
+const createTripsRepo = (tripsData) => {
+  const tripsRepo = new TripsRepo(tripsData)
+  return tripsRepo
+}
+
+const createDomUpdates = (travelersRepo, tripsRepo) => {
+  domUpdates = new DomUpdates(travelersRepo, tripsRepo)
 }
 
 const determineUserType = () => {

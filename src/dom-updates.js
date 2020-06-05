@@ -1,6 +1,7 @@
 class DomUpdates {
-  constructor(travelersRepo) {
+  constructor(travelersRepo, tripsRepo) {
     this.travelersRepo = travelersRepo;
+    this.tripsRepo = tripsRepo;
   }
 
   displayAppropriateUser(userType, currentUser) {
@@ -22,5 +23,7 @@ class DomUpdates {
     loginInput.style.border = '1px solid red'
     console.log(loginInput);
   }
+
+  
 }
 module.exports = DomUpdates
