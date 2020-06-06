@@ -84,9 +84,12 @@ const verifyUserName = (verifiedTraveler) => {
 
 const createUser = (travelerInfo) => {
   const destinationsRepo = domUpdates.destinationsRepo
-  console.log(destinationsRepo);
   const currentUser = new User(travelerInfo, destinationsRepo)
   domUpdates.displayAppropriateUser('traveler', currentUser)
+}
+
+const getUsersTrips = () => {
+  
 }
 
 const createAgency = () => {

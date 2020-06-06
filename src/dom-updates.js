@@ -33,6 +33,7 @@ class DomUpdates {
     const presentTrips = this.tripsRepo.getTripsByDate(userTrips, 'presentTrips', this.todaysDate)
     const pendingTrips = this.tripsRepo.getPendingTrips(userTrips)
     this.displayTripsToDOM(pastTrips, presentTrips, futureTrips, pendingTrips)
+    return userTrips
   }
 
 

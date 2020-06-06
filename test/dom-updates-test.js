@@ -2,6 +2,8 @@ import { expect } from 'chai'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
 import TripRepo from '../src/trip-repo'
+import TravelersRepo from '../src/travelers-repo'
+import DestinationsRepo from '../src/destinations-repo'
 import TestData from '../src/test-data'
 
 const chai = require('chai')
@@ -9,17 +11,21 @@ let spies = require('chai-spies')
 chai.use(spies)
 
 describe('DomUpdates', () => {
+  const todaysDate = '2021/01/01'
   let domUpdates
-  let user
+  // let user
   let tripRepo
-  let travelersRepo = TestData.sampleUsers
+  let travelersRepo
+  let destinationsRepo
 
   beforeEach(() => {
     global.domUpdates
     global.tripRepo
+    travelersRepo = new TravelersRepo(TestData.sampleUsers)
     tripRepo = new TripRepo(TestData.sampleTrips)
-    user = new User(travelersRepo[2])
-    domUpdates = new DomUpdates(travelersRepo)
+    destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
+    // user = new User(travelersRepo[2], destinationsRepo)
+    domUpdates = new DomUpdates(travelersRepo, tripRepo, destinationsRepo, todaysDate)
   })
 
 
@@ -52,5 +58,9 @@ describe('DomUpdates', () => {
     tripRepo.getTripsByUserID(3)
     expect(tripRepo.getTripsByUserID).to.have.been.called(1)
     expect(tripRepo.getTripsByUserID).to.have.been.called.with(3)
+  })
+
+  it.only('should return all users trips', () => {
+    expect(domUpdates.getAllUserTrips(3)).to.equal([])
   })
 })
