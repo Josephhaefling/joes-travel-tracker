@@ -4,8 +4,9 @@
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss'
 import TravelersRepo from '../src/travelers-repo'
-import DestinationsRepo from '../src/travelers-repo'
+import DestinationsRepo from '../src/destinations-repo'
 import TripsRepo from '../src/trip-repo'
+import Trip from '../src/trip'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
 import Agency from '../src/agency'
@@ -84,12 +85,21 @@ const verifyUserName = (verifiedTraveler) => {
 
 const createUser = (travelerInfo) => {
   const destinationsRepo = domUpdates.destinationsRepo
-  const currentUser = new User(travelerInfo, destinationsRepo)
-  domUpdates.displayAppropriateUser('traveler', currentUser)
+  const userTrips = createUsersTrips(travelerInfo)
+    const currentUser = new User(travelerInfo, destinationsRepo, userTrips)
+  domUpdates.displayAppropriateUser('traveler', currentUser, userTrips)
 }
 
-const getUsersTrips = () => {
-  
+const createUsersTrips = (travelerInfo) => {
+  const destinationsRepo = domUpdates.destinationsRepo
+  const trips = domUpdates.getAllUserTrips(travelerInfo.id)
+  return trips.map(trip => {
+    const destination = destinationsRepo.getDesiredDestination(trip.destinationID)
+    const lodgingCost = destinationsRepo.getLodgingCost(destination, trip.duration)
+    const flightCost = destinationsRepo.getFlightCost(destination, trip.travelers)
+    const userTrip = new Trip(trip, lodgingCost, flightCost)
+    return userTrip
+  })
 }
 
 const createAgency = () => {

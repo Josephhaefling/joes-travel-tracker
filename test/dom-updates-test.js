@@ -13,7 +13,7 @@ chai.use(spies)
 describe('DomUpdates', () => {
   const todaysDate = '2021/01/01'
   let domUpdates
-  // let user
+  let user
   let tripRepo
   let travelersRepo
   let destinationsRepo
@@ -24,7 +24,7 @@ describe('DomUpdates', () => {
     travelersRepo = new TravelersRepo(TestData.sampleUsers)
     tripRepo = new TripRepo(TestData.sampleTrips)
     destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
-    // user = new User(travelersRepo[2], destinationsRepo)
+    user = new User(TestData.sampleUsers[2], destinationsRepo)
     domUpdates = new DomUpdates(travelersRepo, tripRepo, destinationsRepo, todaysDate)
   })
 
@@ -60,7 +60,8 @@ describe('DomUpdates', () => {
     expect(tripRepo.getTripsByUserID).to.have.been.called.with(3)
   })
 
-  it.only('should return all users trips', () => {
-    expect(domUpdates.getAllUserTrips(3)).to.equal([])
-  })
+  // it.only('should return all users trips', () => {
+  //   chai.spy.on(domUpdates, 'getAllUserTrips', () => {})
+  //   expect(domUpdates.getAllUserTrips(3)).to.equal([])
+  // })
 })

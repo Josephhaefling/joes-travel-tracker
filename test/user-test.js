@@ -9,10 +9,13 @@ describe('User', () => {
   let destinationsRepo
   let sampleUsers = TestData.sampleUsers
   let destinations = TestData.sampleDestinations
+  let userTrips = [TestData.sampleTrips[2],
+                   TestData.sampleTrips[6],
+                   TestData.sampleTrips[7]]
 
   beforeEach(() => {
     destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
-    user = new User(sampleUsers[2], destinationsRepo)
+    user = new User(sampleUsers[2], destinationsRepo, userTrips)
   })
 
   it('should be a function', () => {
@@ -22,6 +25,10 @@ describe('User', () => {
   it('should be able to get the cost of a trip', () => {
     const destination = user.destinationsRepo.getDesiredDestination(2)
     expect(user.getTotalCostOfTrip(destination, 10, 2)).to.equal(2816)
+  })
+
+  it('should get the total cost of all of the users trips', () => {
+    expect(user.getTotalCostOfAllTrips()).to.equal(20328)
   })
 
 })
