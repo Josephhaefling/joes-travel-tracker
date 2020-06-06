@@ -29,7 +29,6 @@ describe('Trip', () => {
 
   it('should be able to get all future trips', () => {
     let tripList = tripRepo.getTripsByUserID(3)
-    console.log(tripList);
     expect(tripRepo.getTripsByDate(tripList, 'futureTrips', '2020/6/28')).to.deep.equal([tripList[2]])
   })
 

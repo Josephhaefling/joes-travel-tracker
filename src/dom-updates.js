@@ -1,8 +1,9 @@
 class DomUpdates {
-  constructor(travelersRepo, tripsRepo, todaysDate) {
+  constructor(travelersRepo, tripsRepo, destinationsRepo, todaysDate) {
     this.todaysDate = todaysDate;
     this.travelersRepo = travelersRepo;
     this.tripsRepo = tripsRepo;
+    this.destinationsRepo = destinationsRepo;
   }
 
   displayAppropriateUser(userType, currentUser) {
@@ -33,6 +34,8 @@ class DomUpdates {
     const pendingTrips = this.tripsRepo.getPendingTrips(userTrips)
     this.displayTripsToDOM(pastTrips, presentTrips, futureTrips, pendingTrips)
   }
+
+
 
   displayTripsToDOM(pastTrips, presentTrips, futureTrips, pendingTrips) {
     const travelerPage = document.querySelector('.traveler-page')

@@ -4,6 +4,7 @@
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss'
 import TravelersRepo from '../src/travelers-repo'
+import DestinationsRepo from '../src/travelers-repo'
 import TripsRepo from '../src/trip-repo'
 import DomUpdates from '../src/dom-updates'
 import User from '../src/user'
@@ -32,8 +33,8 @@ Promise.all([
 const createDataSets = (travelersData, tripsData, destinationsData) => {
   const travelersRepo = createTravelersRepo(travelersData.travelers);
   const tripsRepo = createTripsRepo(tripsData.trips);
-  const destinations = destinationsData
-  createDomUpdates(travelersRepo, tripsRepo)
+  const destinationsRepo =  new DestinationsRepo(destinationsData.destinations)
+  createDomUpdates(travelersRepo, tripsRepo, destinationsRepo, todaysDate)
 }
 
 const createTravelersRepo = (travelersData) => {
@@ -46,8 +47,8 @@ const createTripsRepo = (tripsData) => {
   return tripsRepo
 }
 
-const createDomUpdates = (travelersRepo, tripsRepo) => {
-  domUpdates = new DomUpdates(travelersRepo, tripsRepo, todaysDate)
+const createDomUpdates = (travelersRepo, tripsRepo, destinationsRepo, todaysDate) => {
+  domUpdates = new DomUpdates(travelersRepo, tripsRepo, destinationsRepo, todaysDate)
 }
 
 const determineUserType = () => {
@@ -82,7 +83,9 @@ const verifyUserName = (verifiedTraveler) => {
 }
 
 const createUser = (travelerInfo) => {
-  const currentUser = new User(travelerInfo)
+  const destinationsRepo = domUpdates.destinationsRepo
+  console.log(destinationsRepo);
+  const currentUser = new User(travelerInfo, destinationsRepo)
   domUpdates.displayAppropriateUser('traveler', currentUser)
 }
 
