@@ -36,8 +36,6 @@ class DomUpdates {
     return userTrips
   }
 
-
-
   displayTripsToDOM(pastTrips, presentTrips, futureTrips, pendingTrips) {
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend', `
