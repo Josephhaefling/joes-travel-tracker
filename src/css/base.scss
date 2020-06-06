@@ -84,6 +84,15 @@ h1 {
     grid-area: 2 / 2 / 10 / 5;
     justify-content: space-around;
   }
+  .total-spent {
+    align-items: center;
+    border: 1px solid red;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    grid-area: 2 / 6 / 10 / 7;
+    justify-content: space-around;
+  }
 
   .traveler-greeting {
     color: #fff;
@@ -105,7 +114,11 @@ h1 {
   .pending-trips {
     @include tripsContainer(20%, 80%)
   }
+  .total {
+    @include tripsContainer(20%, 80%)
+  }
 }
+
 
 .hide {
   display: none;

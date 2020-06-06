@@ -4,9 +4,11 @@ class DomUpdates {
     this.travelersRepo = travelersRepo;
     this.tripsRepo = tripsRepo;
     this.destinationsRepo = destinationsRepo;
+    // this.currentUser = null;
   }
 
   displayAppropriateUser(userType, currentUser) {
+    // this.currentUser = currentUser
     const loginForm = document.querySelector('.login-form')
     const userPage = document.querySelector(`.${userType}-page`)
     loginForm.classList.add('hide')
@@ -19,6 +21,7 @@ class DomUpdates {
     const travelerFirstName = currentUser.name.split(' ')[0];
     userGreeting.innerText = `Welcome Back ${travelerFirstName}`
     this.getAllUserTrips(currentUser.id)
+    this.displayTotalSpent(currentUser)
   }
 
   displayLoginError(errorType) {
@@ -45,6 +48,16 @@ class DomUpdates {
       <section class="upcoming-trips">You have ${futureTrips.length} future trips.</section>
       <section class="pending-trips">You have ${pendingTrips.length} pending trips.</section>
     </section>
+    `)
+  }
+
+  displayTotalSpent(currentUser) {
+    const totalSpent = currentUser.getTotalCostOfAllTrips()
+    const travelerPage = document.querySelector('.traveler-page')
+    travelerPage.insertAdjacentHTML('beforeend',`
+    <section class="total-spent">
+      <p class="total">${totalSpent}</p>
+    <section>
     `)
   }
 }

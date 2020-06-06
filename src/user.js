@@ -18,11 +18,7 @@ class User {
 
   getTotalCostOfAllTrips() {
     return this.userTrips.reduce((totalSpent, trip) => {
-      const destination = this.destinationsRepo.getDesiredDestination(trip.destinationID)
-      const numberOfDays = trip.duration
-      const numberOfTravelers = trip.travelers
-      let tripCost = this.getTotalCostOfTrip(destination, numberOfDays, numberOfTravelers)
-      console.log(tripCost);
+      const tripCost = trip.getTripCost()
       totalSpent += tripCost
       return totalSpent
     }, 0)
