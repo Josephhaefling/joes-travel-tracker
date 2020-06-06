@@ -65,7 +65,7 @@ h1 {
 .agency-page {
   grid-area: 4 / 1 / 21 / 21;
   display: grid;
-  grid-template-columns: repeat(10, 10%);
+  grid-template-columns: repeat(20, 5%);
   grid-template-rows: repeat(10, 10%);
   .agency-greeting {
     color: #fff;
@@ -73,6 +73,38 @@ h1 {
     grid-area: 1 / 2 / 2 / 20;
     margin: 0;
     text-align: center;
+  }
+  .pending-trips-display {
+    align-items: center;
+    border: 1px solid red;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-area: 2 / 2 / 10 / 6;
+    justify-content: space-around;
+  }
+  .total-revenue-display {
+    align-items: center;
+    border: 1px solid red;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    grid-area: 2 / 7 / 10 / 11;
+    justify-content: space-around;
+  }
+  .current-travelers-display {
+    align-items: center;
+    border: 1px solid red;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    grid-area: 2 / 12 / 10 / 16;
+    justify-content: space-around;
+  }
+
+  .pending-trip {
+    @include tripsContainer(12%, 20%)
   }
 }
 
@@ -124,7 +156,6 @@ h1 {
     @include tripsContainer(20%, 80%)
   }
 }
-
 
 .hide {
   display: none;

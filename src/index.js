@@ -97,7 +97,7 @@ const createUsersTrips = (travelerInfo) => {
     const destination = destinationsRepo.getDesiredDestination(trip.destinationID)
     const lodgingCost = destinationsRepo.getLodgingCost(destination, trip.duration)
     const flightCost = destinationsRepo.getFlightCost(destination, trip.travelers)
-    const userTrip = new Trip(trip, lodgingCost, flightCost)
+    const userTrip = new Trip(trip, lodgingCost, flightCost, travelerInfo.name)
     return userTrip
   })
 }
@@ -113,9 +113,12 @@ const createAgency = () => {
 }
 
 const createUsersForAgency = () => {
+  const destinationsRepo = domUpdates.destinationsRepo
+  const tripsRepo = domUpdates.tripsRepo
   const travelersRepo = domUpdates.travelersRepo
   return travelersRepo.allTravelers.map(traveler => {
-    let user = new User(traveler)
+    let usersTrips = createUsersTrips(traveler)
+    let user = new User(traveler, destinationsRepo, usersTrips)
     return user
   })
 }

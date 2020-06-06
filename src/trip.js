@@ -1,5 +1,5 @@
 class Trip {
-  constructor(tripInfo, lodgingCost, flightCost) {
+  constructor(tripInfo, lodgingCost, flightCost, travelerName) {
     this.id = tripInfo.id
     this.userID = tripInfo.userID
     this.destinationID = tripInfo.destinationID,
@@ -10,6 +10,7 @@ class Trip {
     this.flightCost = flightCost
     this.status = tripInfo.status,
     this.suggestedActivities = tripInfo.suggestedActivities
+    this.travelerName = travelerName
   }
 
   getTripCost() {

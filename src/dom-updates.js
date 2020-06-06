@@ -8,7 +8,6 @@ class DomUpdates {
   }
 
   displayAppropriateUser(userType, currentUser) {
-    // this.currentUser = currentUser
     const loginForm = document.querySelector('.login-form')
     const userPage = document.querySelector(`.${userType}-page`)
     loginForm.classList.add('hide')
@@ -20,7 +19,9 @@ class DomUpdates {
     if (userType === 'traveler') {
     this.getAllUserTrips(currentUser)
     this.displayTotalSpent(currentUser)
-    }
+  } else {
+    this.createAgencyDisplays(currentUser)
+  }
     const userGreeting = document.querySelector(`.${userType}-greeting`)
     const travelerFirstName = currentUser.name.split(' ')[0];
     userGreeting.innerText = `Welcome Back ${travelerFirstName}`
@@ -61,6 +62,31 @@ class DomUpdates {
       <p class="total">${totalSpent}</p>
     <section>
     `)
+  }
+
+  createAgencyDisplays(agency) {
+    const agencyPage = document.querySelector('.agency-page')
+    agencyPage.insertAdjacentHTML('beforeend', `
+    <section class="pending-trips-display"></section>
+    <section class="total-revenue-display"></section>
+    <section class="current-travelers-display"></section>
+    `)
+    this.displayPendingTrips(agency)
+  }
+
+  displayPendingTrips(agency) {
+    const pendingTripsDisplay = document.querySelector('.pending-trips-display')
+    const pendingTrips = agency.getPendingTrips()
+    pendingTrips.forEach(trip => {
+      console.log(trip);
+      pendingTripsDisplay.insertAdjacentHTML('beforeend', `
+        <section class="pending-trip">
+          <p class="pending-trips">Date:${trip.date}</p>
+          <p class="pending-trips">Name:${trip.travelerName}</p>
+          <p class="pending-trips">Trip ID:${trip.id}</p>
+        </section>
+      `)
+    })
   }
 }
 module.exports = DomUpdates

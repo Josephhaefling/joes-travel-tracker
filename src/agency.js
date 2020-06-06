@@ -6,9 +6,17 @@ class Agency {
   this.travelersRepo = travelersRepo
   }
 
-  getRequestedTrips() {
-
+  getPendingTrips() {
+    return this.travelersRepo.reduce((pendingTrips, traveler) => {
+      traveler.userTrips.forEach(userTrip => {
+        if(userTrip.status === 'pending') {
+          pendingTrips.push(userTrip)
+        }
+      })
+      return pendingTrips
+    }, [])
   }
+
 
   getYearlyIncome() {
 
