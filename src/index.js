@@ -92,7 +92,7 @@ const createUser = (travelerInfo) => {
 
 const createUsersTrips = (travelerInfo) => {
   const destinationsRepo = domUpdates.destinationsRepo
-  const trips = domUpdates.getAllUserTrips(travelerInfo.id)
+  const trips = domUpdates.getAllUserTrips(travelerInfo)
   return trips.map(trip => {
     const destination = destinationsRepo.getDesiredDestination(trip.destinationID)
     const lodgingCost = destinationsRepo.getLodgingCost(destination, trip.duration)
@@ -103,12 +103,21 @@ const createUsersTrips = (travelerInfo) => {
 }
 
 const createAgency = () => {
+  const usersList = createUsersForAgency();
   if (verifyPassword() === true) {
-    const agency = new Agency()
+    const agency = new Agency(usersList)
     domUpdates.displayAppropriateUser('agency', agency)
   } else {
     domUpdates.displayLoginError('password')
   }
+}
+
+const createUsersForAgency = () => {
+  const travelersRepo = domUpdates.travelersRepo
+  return travelersRepo.allTravelers.map(traveler => {
+    let user = new User(traveler)
+    return user
+  })
 }
 
 const verifyPassword = () => {

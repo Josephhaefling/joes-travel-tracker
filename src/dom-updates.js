@@ -17,11 +17,13 @@ class DomUpdates {
   }
 
   greetUser(userType, currentUser) {
+    if (userType === 'traveler') {
+    this.getAllUserTrips(currentUser)
+    this.displayTotalSpent(currentUser)
+    }
     const userGreeting = document.querySelector(`.${userType}-greeting`)
     const travelerFirstName = currentUser.name.split(' ')[0];
     userGreeting.innerText = `Welcome Back ${travelerFirstName}`
-    this.getAllUserTrips(currentUser.id)
-    this.displayTotalSpent(currentUser)
   }
 
   displayLoginError(errorType) {
@@ -29,8 +31,8 @@ class DomUpdates {
     loginInput.style.border = '1px solid red'
   }
 
-  getAllUserTrips(userID) {
-    const userTrips = this.tripsRepo.getTripsByUserID(userID)
+  getAllUserTrips(currentUser) {
+    const userTrips = this.tripsRepo.getTripsByUserID(currentUser.id)
     const pastTrips = this.tripsRepo.getTripsByDate(userTrips, 'pastTrips', this.todaysDate)
     const futureTrips = this.tripsRepo.getTripsByDate(userTrips, 'futureTrips', this.todaysDate)
     const presentTrips = this.tripsRepo.getTripsByDate(userTrips, 'presentTrips', this.todaysDate)

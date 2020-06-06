@@ -57,4 +57,8 @@ describe('User', () => {
     expect(user.getTotalCostOfAllTrips()).to.equal(21538)
   })
 
+  it('should be able to get pendingTrips', () => {
+    expect(user.getPendingTrips()).to.deep.equal([userTrips[0]])
+  })
+
 })

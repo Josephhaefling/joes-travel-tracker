@@ -24,8 +24,8 @@ class User {
     }, 0)
   }
 
-  filterTrips(searchType, searchValue) {
-
+  getPendingTrips() {
+  return this.userTrips.filter(userTrip => userTrip.status === 'pending')
   }
 
   requestTrip(date, duration, numberOfTravelers) {
