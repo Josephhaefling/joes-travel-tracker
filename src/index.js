@@ -13,6 +13,10 @@ import Agency from '../src/agency'
 import './images/turing-logo.png'
 import './images/planet-earth.jpg'
 
+<<<<<<< Updated upstream
+=======
+const moment = require('moment')
+>>>>>>> Stashed changes
 const todaysDate = '2020/01/02'
 
 const loginButton = document.querySelector('.login-button')
@@ -88,6 +92,7 @@ const createUser = (travelerInfo) => {
   const userTrips = createUsersTrips(travelerInfo)
     const currentUser = new User(travelerInfo, destinationsRepo, userTrips)
   domUpdates.displayAppropriateUser('traveler', currentUser, userTrips)
+  createEventListener()
 }
 
 const createUsersTrips = (travelerInfo) => {
@@ -128,4 +133,16 @@ const verifyPassword = () => {
   if(password) {
   return password.value === 'travel2020' ? true : false;
   }
+}
+
+const createEventListener = () => {
+  const requestTripButtton = document.querySelector('.request-trip-button')
+  requestTripButtton.addEventListener('click', () => {
+    getTripCost()
+  })
+}
+
+const getTripCost = () => {
+  const formData = domUpdates.getFormData()
+  console.log(formData);
 }

@@ -4,6 +4,7 @@ class DomUpdates {
     this.travelersRepo = travelersRepo;
     this.tripsRepo = tripsRepo;
     this.destinationsRepo = destinationsRepo;
+    this.requestedTrips = []
   }
 
   displayAppropriateUser(userType, currentUser) {
@@ -61,6 +62,54 @@ class DomUpdates {
       <p class="total">${totalSpent}</p>
     <section>
     `)
+    this.displayTripRequestForm()
+  }
+
+  displayTripRequestForm() {
+    const travelerPage = document.querySelector('.traveler-page')
+    travelerPage.insertAdjacentHTML('beforeend', `
+    <section class="trip-request-form">
+      <form>
+      <p>Your Name:</p>
+      <input type="text" class="name">
+      <p>Number of Travelers:</p>
+      <select id="num-travelers">
+      </select>
+      <label for="start-date">Trip Start Date</label>
+      <input type="date" id="start-date">
+      <label for="end-date">Trip End Date</label>
+      <input type="date" id="end-date">
+      <label for="destination-selector">
+      <p>Please select your destination</p>
+      <select id="destination-selector">
+      <option>Please Select a Destintion</option>
+      </select>
+      <button type="button" class="request-trip-button">Request Trip</button>
+      </label>
+      </form>
+     </section>
+    `)
+    this.generateNumberOfTravelers()
+    this.generateDestinations()
+  }
+
+  generateNumberOfTravelers() {
+    const numTravelers = document.querySelector('#num-travelers')
+    const numberOfTravelers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    numberOfTravelers.forEach(number => {
+      numTravelers.insertAdjacentHTML('beforeend', `
+      <option>${number}</option>
+      `)
+    })
+  }
+
+  generateDestinations() {
+    const destinationSelector = document.querySelector('#destination-selector')
+    this.destinationsRepo.availableDestinations.forEach(destination => {
+      destinationSelector.insertAdjacentHTML('beforeend', `
+      <option>${destination.destination}</option>
+      `)
+    })
   }
 
   createAgencyDisplays(agency) {
@@ -106,6 +155,22 @@ class DomUpdates {
       <p class="currently-traveling">${currentTraveler.travelerName}</p>
       `)
     })
+  }
+
+  getFormData() {
+    const nameInput = document.querySelector('.name')
+    const numTravelers = document.querySelector('#num-travelers')
+    const startDate = document.querySelector('#start-date')
+    const endDate = document.querySelector('#end-date')
+    const destination = document.querySelector('#destination-selector')
+    this.getUserById
+    return {
+      name: nameInput.value,
+      numTravelers: numTravelers.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+      destination: destination.value
+    }
   }
 }
 module.exports = DomUpdates
