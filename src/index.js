@@ -13,7 +13,7 @@ import Agency from '../src/agency'
 import './images/turing-logo.png'
 import './images/planet-earth.jpg'
 
-const todaysDate = '2021/01/01'
+const todaysDate = '2020/01/02'
 
 const loginButton = document.querySelector('.login-button')
 let domUpdates

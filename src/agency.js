@@ -30,8 +30,15 @@ class Agency {
     }, 0)
   }
 
-  getUsersTravelingList() {
-
+  getUsersTravelingList(todaysDate) {
+    return this.travelersRepo.reduce((currentTravelers, traveler) => {
+      traveler.userTrips.forEach(trip => {
+        if(Date.parse(trip.date) === Date.parse(todaysDate)) {
+          currentTravelers.push(trip)
+        }
+      })
+      return currentTravelers
+    }, [])
   }
 
   getUserByName() {

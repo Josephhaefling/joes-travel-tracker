@@ -4,7 +4,6 @@ class DomUpdates {
     this.travelersRepo = travelersRepo;
     this.tripsRepo = tripsRepo;
     this.destinationsRepo = destinationsRepo;
-    // this.currentUser = null;
   }
 
   displayAppropriateUser(userType, currentUser) {
@@ -95,6 +94,18 @@ class DomUpdates {
     totalRevenueDisplay.insertAdjacentHTML('beforeend', `
     <p>${totalRevenue}</p>
     `)
+    this.displayCurrentTravelers(agency)
+  }
+
+  displayCurrentTravelers(agency) {
+    const currentTravelers = document.querySelector('.current-travelers-display')
+    const currentTravelersList = agency.getUsersTravelingList(this.todaysDate)
+    currentTravelersList.forEach(currentTraveler => {
+      console.log(currentTraveler);
+      currentTravelers.insertAdjacentHTML('beforeend', `
+      <p class="currently-traveling">${currentTraveler.travelerName}</p>
+      `)
+    })
   }
 }
 module.exports = DomUpdates
