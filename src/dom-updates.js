@@ -72,13 +72,13 @@ class DomUpdates {
     <section class="current-travelers-display"></section>
     `)
     this.displayPendingTrips(agency)
+    this.displayRevenue(agency)
   }
 
   displayPendingTrips(agency) {
     const pendingTripsDisplay = document.querySelector('.pending-trips-display')
     const pendingTrips = agency.getPendingTrips()
     pendingTrips.forEach(trip => {
-      console.log(trip);
       pendingTripsDisplay.insertAdjacentHTML('beforeend', `
         <section class="pending-trip">
           <p class="pending-trips">Date:${trip.date}</p>
@@ -87,6 +87,14 @@ class DomUpdates {
         </section>
       `)
     })
+  }
+
+  displayRevenue(agency) {
+    const totalRevenueDisplay = document.querySelector('.total-revenue-display')
+    const totalRevenue = agency.getYearlyIncome()
+    totalRevenueDisplay.insertAdjacentHTML('beforeend', `
+    <p>${totalRevenue}</p>
+    `)
   }
 }
 module.exports = DomUpdates

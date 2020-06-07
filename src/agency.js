@@ -19,7 +19,15 @@ class Agency {
 
 
   getYearlyIncome() {
-
+    return this.travelersRepo.reduce((totalIncome, traveler) => {
+      traveler.userTrips.forEach(trip => {
+        const lodgingFee = trip.lodgingCost * .10
+        const flightFee = trip.flightCost * .10
+        const totalFee = lodgingFee + flightFee
+        totalIncome += totalFee
+      })
+      return totalIncome
+    }, 0)
   }
 
   getUsersTravelingList() {

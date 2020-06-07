@@ -82,6 +82,6 @@ describe('Agency', () => {
   })
 
   it('should be able to get the agencys totoal income for the year', ()=> {
-    expect(agency.getYearlyIncome()).to.equal(0)
+    expect(agency.getYearlyIncome()).to.equal(2844)
   })
 })
