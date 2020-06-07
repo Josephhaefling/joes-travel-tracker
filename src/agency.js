@@ -6,16 +6,39 @@ class Agency {
   this.travelersRepo = travelersRepo
   }
 
-  getRequestedTrips() {
-
+  getPendingTrips() {
+    return this.travelersRepo.reduce((pendingTrips, traveler) => {
+      traveler.userTrips.forEach(userTrip => {
+        if(userTrip.status === 'pending') {
+          pendingTrips.push(userTrip)
+        }
+      })
+      return pendingTrips
+    }, [])
   }
+
 
   getYearlyIncome() {
-
+    return this.travelersRepo.reduce((totalIncome, traveler) => {
+      traveler.userTrips.forEach(trip => {
+        const lodgingFee = trip.lodgingCost * .10
+        const flightFee = trip.flightCost * .10
+        const totalFee = lodgingFee + flightFee
+        totalIncome += totalFee
+      })
+      return totalIncome
+    }, 0)
   }
 
-  getUsersTravelingList() {
-
+  getUsersTravelingList(todaysDate) {
+    return this.travelersRepo.reduce((currentTravelers, traveler) => {
+      traveler.userTrips.forEach(trip => {
+        if(Date.parse(trip.date) === Date.parse(todaysDate)) {
+          currentTravelers.push(trip)
+        }
+      })
+      return currentTravelers
+    }, [])
   }
 
   getUserByName() {

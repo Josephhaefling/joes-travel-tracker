@@ -3,7 +3,8 @@ class TravelersRepo {
     this.allTravelers = travelersData;
   }
 
-  getUserById(userID) {
+  getUserById(userIDNum) {
+    const userID = userIDNum || 0
     return this.allTravelers.find(traveler => traveler.id === userID)
   }
 }

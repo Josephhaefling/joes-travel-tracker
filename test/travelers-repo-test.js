@@ -15,4 +15,5 @@ describe('TravelersRepo', () => {
   it('should be able to get a users info by id', () => {
     expect(travelersRepo.getUserById(3)).to.deep.equal(travelersRepo.allTravelers[2])
   })
+  
 })

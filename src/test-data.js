@@ -1,4 +1,5 @@
 SampleData = {
+  todaysDate: Date.now(),
   sampleUsers: [{
 "id": 1,
 "name": "Ham Leadbeater",
