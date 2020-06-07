@@ -7,6 +7,10 @@ class DestinationsRepo {
     return this.availableDestinations.find(destination => destination.id === destinationID)
   }
 
+  getDestinationByName(destinationName) {
+    return this.availableDestinations.find(destination => destination.destination === destinationName)
+  }
+
   getLodgingCost(destination, numberOfDays) {
     return destination.estimatedLodgingCostPerDay * numberOfDays
   }

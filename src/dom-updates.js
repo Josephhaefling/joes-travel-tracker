@@ -163,7 +163,12 @@ class DomUpdates {
     const startDate = document.querySelector('#start-date')
     const endDate = document.querySelector('#end-date')
     const destination = document.querySelector('#destination-selector')
-    this.getUserById
+    this.getFullTripInfo(nameInput.value, destination.value)
+  }
+
+  getFullTripInfo(userName, destination) {
+    const fullUserInfo = this.travelersRepo.getUserByName(nameInput.value)
+    const fullDestinationInfo = null
     return {
       name: nameInput.value,
       numTravelers: numTravelers.value,
