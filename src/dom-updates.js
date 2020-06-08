@@ -23,6 +23,7 @@ class DomUpdates {
     this.getAllUserTrips(currentUser)
     this.displayTotalSpent(currentUser)
   } else {
+    this.currentUser = currentUser
     this.createAgencyDisplays(currentUser)
   }
     const userGreeting = document.querySelector(`.${userType}-greeting`)
@@ -116,20 +117,24 @@ class DomUpdates {
     })
   }
 
-  createAgencyDisplays(agency) {
+  createAgencyDisplays() {
     const agencyPage = document.querySelector('.agency-page')
     agencyPage.insertAdjacentHTML('beforeend', `
+    <section class="user-search">
+    <input type="text" class="user-name-input" value="Sibby Dawidowitsch">
+    <button type="button" class="search-user-button">View Trip</button>
+    </section>
     <section class="pending-trips-display"></section>
     <section class="total-revenue-display"></section>
     <section class="current-travelers-display"></section>
     `)
-    this.displayPendingTrips(agency)
-    this.displayRevenue(agency)
+    this.displayPendingTrips()
+    this.displayRevenue()
   }
 
-  displayPendingTrips(agency) {
+  displayPendingTrips() {
     const pendingTripsDisplay = document.querySelector('.pending-trips-display')
-    const pendingTrips = agency.getPendingTrips()
+    const pendingTrips = this.currentUser.getPendingTrips()
     pendingTrips.forEach(trip => {
       pendingTripsDisplay.insertAdjacentHTML('beforeend', `
         <section class="pending-trip">
@@ -142,18 +147,18 @@ class DomUpdates {
     })
   }
 
-  displayRevenue(agency) {
+  displayRevenue() {
     const totalRevenueDisplay = document.querySelector('.total-revenue-display')
-    const totalRevenue = agency.getYearlyIncome()
+    const totalRevenue = this.currentUser.getYearlyIncome()
     totalRevenueDisplay.insertAdjacentHTML('beforeend', `
     <p>${totalRevenue}</p>
     `)
-    this.displayCurrentTravelers(agency)
+    this.displayCurrentTravelers()
   }
 
-  displayCurrentTravelers(agency) {
+  displayCurrentTravelers() {
     const currentTravelers = document.querySelector('.current-travelers-display')
-    const currentTravelersList = agency.getUsersTravelingList(this.todaysDate)
+    const currentTravelersList = this.currentUser.getUsersTravelingList(this.todaysDate)
     currentTravelersList.forEach(currentTraveler => {
       currentTravelers.insertAdjacentHTML('beforeend', `
       <p class="currently-traveling">${currentTraveler.travelerName}</p>
@@ -203,18 +208,20 @@ class DomUpdates {
     return {tripLength: tripLength, lodging: lodgingCost, flight:flightCost}
   }
 
-  displayRequestedTrip(agecny) {
-    console.log('agency', agecny);
+  displayRequestedTrip() {
     const tripID = parseInt(event.target.id)
     const requestedTrip = this.tripsRepo.getTripByID(tripID)
-    console.log(requestedTrip);
+    const userName = this.travelersRepo.getUserById(requestedTrip.userID)
+    const userRequestingTrip = this.currentUser.getUserByName(userName.name)
+    const fullRequestedTrip = userRequestingTrip.getTripByID(tripID)
     const agencyPage = document.querySelector('.agency-page')
     agencyPage.insertAdjacentHTML('beforeend', `
     <section class="requested-trip" id="${event.target.id}">
       <section class=trip-info>
-      <p>Trip ID:${requestedTrip.id}</p>
-      <p>TripDate:${requestedTrip.date}</p>
-      <p>Number of Travelers:${requestedTrip.travelers}</p>
+      <p>User Name:${fullRequestedTrip.travelerName}
+      <p>Trip ID:${fullRequestedTrip.id}</p>
+      <p>TripDate:${fullRequestedTrip.date}</p>
+      <p>Number of Travelers:${fullRequestedTrip.travelers}</p>
       <button type="button" class="approve-request-button" id=${requestedTrip.id}>Approve Trip</button>
       <button type="button" class="deny-request-button" id="${requestedTrip.id}">Deny Trip</button>
       </section>
@@ -225,6 +232,37 @@ class DomUpdates {
   closeRequestedTripPage(requestedTripID) {
     const requestedTrip = document.querySelector('.requested-trip')
     requestedTrip.classList.add('hide')
+  }
+
+  displaySearchedUser(requestedUser) {
+    const totalSpent = requestedUser.getTotalCostOfAllTrips()
+    const agencyPage = document.querySelector('.agency-page')
+    const requestedUserPage = document.querySelector('.requested-user-page')
+    agencyPage.classList.add('hide')
+    requestedUserPage.classList.remove('hide')
+    requestedUserPage.insertAdjacentHTML('beforeend', `
+      <section class="requested-user-info">
+        <p class="user-name">Name: ${requestedUser.name}</p>
+        <p class="user-spent">Total Spent: ${totalSpent}</p>
+        <section class="users-trips"></section>
+      </section>
+    `)
+  }
+
+    generateUsersTrips(requestedUsersTrips) {
+      const usersTrips = document.querySelector('.users-trips')
+      requestedUsersTrips.forEach(trip => {
+      usersTrips.insertAdjacentHTML('beforeend', `
+      <section class="trip ${trip.id}">
+        <img class="destination-image" src="${trip.image}" alt="${trip.alt}>
+        <p class="user-info" id="${trip.id}">${trip.destinationName}</p>
+        <p class="user-info" id="${trip.id}">${trip.date}</p>
+        <p class="user-info" id="${trip.id}">${trip.duration}</p>
+        <p class="user-info" id="${trip.id}">${trip.status}</p>
+        <p class="user-info" id="${trip.id}">${trip.travelers}</p>
+      </section>
+      `)
+    })
   }
 }
 module.exports = DomUpdates

@@ -99,7 +99,7 @@ const createUsersTrips = (travelerInfo) => {
     const destination = destinationsRepo.getDesiredDestination(trip.destinationID)
     const lodgingCost = destinationsRepo.getLodgingCost(destination, trip.duration)
     const flightCost = destinationsRepo.getFlightCost(destination, trip.travelers)
-    const userTrip = new Trip(trip, lodgingCost, flightCost, travelerInfo.name)
+    const userTrip = new Trip(trip, lodgingCost, flightCost, travelerInfo.name, destination)
     return userTrip
   })
 }
@@ -109,7 +109,8 @@ const createAgency = () => {
   if (verifyPassword() === true) {
     const agency = new Agency(usersList)
     domUpdates.displayAppropriateUser('agency', agency)
-    createViewTripListener(agency)
+    createViewTripListener()
+    createSearchByUserListener()
   } else {
     domUpdates.displayLoginError('password')
   }
@@ -198,16 +199,23 @@ const postTrip = (requestedTrip) => {
       })
     }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
-    // domUpdates.greetUser('traveler', domUpdates.currentUser);
     const updatedUser = domUpdates.travelersRepo.getUserById(requestedTrip.userID)
     createUser(updatedUser)
 }
 
-const createViewTripListener = (agency) => {
+const createViewTripListener = () => {
   const viewTripButtton = document.querySelector('.view-trip')
   viewTripButtton.addEventListener('click', () => {
-    domUpdates.displayRequestedTrip(agency)
+    domUpdates.displayRequestedTrip()
     createRequestedTripListeners()
+  })
+}
+
+const createSearchByUserListener = () => {
+  const userNameInput = document.querySelector('.user-name-input')
+  const searchUserButton = document.querySelector('.search-user-button')
+  searchUserButton.addEventListener('click', () => {
+    getUserByName()
   })
 }
 
@@ -252,4 +260,12 @@ const deleteTrip = (tripID) => {
       })
     }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
+}
+const getUserByName = () => {
+  const userNameInput = document.querySelector('.user-name-input')
+  const userName = userNameInput.value
+  const agency = domUpdates.currentUser
+  const requestedUser = agency.getUserByName(userName)
+  domUpdates.displaySearchedUser(requestedUser);
+  domUpdates.generateUsersTrips(requestedUser.userTrips)
 }

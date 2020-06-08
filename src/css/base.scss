@@ -83,6 +83,8 @@ h1 {
     flex-wrap: wrap;
     grid-area: 2 / 2 / 10 / 10;
     justify-content: space-around;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
   }
   .total-revenue-display {
     align-items: center;
@@ -90,7 +92,7 @@ h1 {
     color: #fff;
     display: flex;
     flex-direction: column;
-    grid-area: 2 /11 / 10 / 14;
+    grid-area: 5 / 11 / 10 / 14;
     justify-content: space-around;
   }
   .current-travelers-display {
@@ -99,12 +101,67 @@ h1 {
     color: #fff;
     display: flex;
     flex-direction: column;
-    grid-area: 2 / 15 / 10 / 20;
+    grid-area: 5 / 15 / 10 / 20;
+    justify-content: space-around;
+  }
+
+  .user-search {
+    align-items: center;
+    border: 1px solid red;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    grid-area: 2 / 11 / 4 / 20;
     justify-content: space-around;
   }
 
   .pending-trip {
-    @include tripsContainer(12%, 20%)
+    @include tripsContainer(50%, 40%)
+  }
+}
+
+.requested-user-page {
+  grid-area: 4 / 1 / 21 / 21;
+  display: grid;
+  grid-template-columns: repeat(20, 5%);
+  grid-template-rows: repeat(10, 10%);
+
+  .requested-user-info {
+    background-color: rgba(206, 203, 178, .6);
+    border: 1px solid red;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    grid-area: 2 / 6 / 10 / 16;
+  }
+
+  .users-trips {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .trip {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blue;
+    height: 60%;
+    width: 45%;
+    margin-bottom: 5%;
+
+  .destination-image {
+    height: 50%;
+    width: 100%;
+  }
+  .user-info {
+    margin: 0;
+    font-size: 16px;
+    text-align: center;
+  }
   }
 }
 
@@ -202,10 +259,11 @@ h1 {
   grid-area: 2 / 1 / 11 / 21;
   grid-template-columns: repeat(10, 10%);
   grid-template-rows: repeat(10, 10%);
+  overflow-y: scroll;
+  scroll-behavior: smooth;
   .trip-info {
     background-color: rgb(92, 89, 48);
-    grid-area: 2 / 2 / 6 / 6;
-  }
+    }
 }
 
 

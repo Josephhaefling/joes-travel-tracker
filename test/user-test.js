@@ -61,4 +61,8 @@ describe('User', () => {
     expect(user.getPendingTrips()).to.deep.equal([userTrips[0]])
   })
 
+  it('should be able to get a users trip by id', () => {
+    expect(user.getTripByID(7)).to.deep.equal(trip2)
+  })
+
 })
