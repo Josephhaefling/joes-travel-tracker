@@ -89,7 +89,7 @@ const createUser = (travelerInfo) => {
   const userTrips = createUsersTrips(travelerInfo)
     const currentUser = new User(travelerInfo, destinationsRepo, userTrips)
   domUpdates.displayAppropriateUser('traveler', currentUser, userTrips)
-  createEventListener()
+  createRequestTripListener()
 }
 
 const createUsersTrips = (travelerInfo) => {
@@ -132,14 +132,70 @@ const verifyPassword = () => {
   }
 }
 
-const createEventListener = () => {
+const createRequestTripListener = () => {
   const requestTripButtton = document.querySelector('.request-trip-button')
   requestTripButtton.addEventListener('click', () => {
-    getTripCost()
+    getTripInfo()
   })
 }
 
-const getTripCost = () => {
+const getTripInfo = () => {
+  const tripID = Date.now()
   const formData = domUpdates.getFormData()
-  console.log(formData);
+  const name = formData.name
+  const numTravelers = formData.numTravelers
+  const startDate = formData.startDate
+  const endDate = formData.endDate
+  const destination = formData.destination
+  const fullUser = domUpdates.travelersRepo.getUserByName(name)
+  const fullDestination = domUpdates.destinationsRepo.getDestinationByName(destination)
+  const costMetrics = domUpdates.generateCostMetrics(startDate, endDate, numTravelers, fullDestination)
+  const requestedTrip = {
+    id: tripID,
+    userID: fullUser.id,
+    destinationID: fullDestination.id,
+    travelers: numTravelers,
+    date: startDate,
+    duration: costMetrics.tripLength,
+    status: "pending",
+    suggestedActivities: [],
+  }
+    getEstimatedCost(requestedTrip, costMetrics, fullUser.name)
+}
+
+const getEstimatedCost = (tripInfo, costMetrics, fullUser) => {
+  const requestedTrip = new Trip(tripInfo, costMetrics.lodging, costMetrics.flight, fullUser)
+  const tripCost = requestedTrip.getTripCost()
+  domUpdates.displayRequestedTripCost(tripCost)
+  createConfirmTripListener(requestedTrip)
+}
+
+const createConfirmTripListener = (requestedTrip) => {
+  const confirmTripButton = document.querySelector('.confirm-trip-button')
+  confirmTripButton.addEventListener('click', () => {
+    postTrip(requestedTrip)
+  })
+}
+
+const postTrip = (requestedTrip) => {
+  const date = moment(requestedTrip.date).format("YYYY/MM/DD").toString();
+  const travelers = parseInt(requestedTrip.travelers)
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "id": requestedTrip.id,
+        "userID": requestedTrip.userID,
+        "destinationID": requestedTrip.destinationID,
+        "travelers": travelers,
+        "date": date,
+        "duration": requestedTrip.duration,
+        "status": requestedTrip.status,
+        "suggestedActivities": requestedTrip.suggestedActivities
+      })
+    }).then(response => console.log(response.json()))
+    .catch(err => console.error(err.message))
+    domUpdates.greetUser('traveler', domUpdates.currentUser);
 }
