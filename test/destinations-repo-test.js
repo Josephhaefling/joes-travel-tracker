@@ -27,4 +27,8 @@ describe('DestinationsRepo', () => {
     const destination = destinationsRepo.getDesiredDestination(2)
     expect(destinationsRepo.getFlightCost(destination, 2)).to.equal(1560)
   })
+
+  it('should be able to get a destination by name', () => {
+    expect(destinationsRepo.getDestinationByName("Lima, Peru")).to.deep.equal(destinations[0])
+  })
 })

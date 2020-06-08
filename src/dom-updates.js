@@ -1,9 +1,13 @@
+const moment = require('moment')
+
 class DomUpdates {
   constructor(travelersRepo, tripsRepo, destinationsRepo, todaysDate) {
     this.todaysDate = todaysDate;
     this.travelersRepo = travelersRepo;
     this.tripsRepo = tripsRepo;
     this.destinationsRepo = destinationsRepo;
+    this.currentUser = null
+    this.requestedTrips = []
   }
 
   displayAppropriateUser(userType, currentUser) {
@@ -61,6 +65,55 @@ class DomUpdates {
       <p class="total">${totalSpent}</p>
     <section>
     `)
+    this.currentUser = currentUser
+    this.displayTripRequestForm()
+  }
+
+  displayTripRequestForm() {
+    const travelerPage = document.querySelector('.traveler-page')
+    travelerPage.insertAdjacentHTML('beforeend', `
+    <section class="trip-request-form">
+      <form class="trip-form">
+      <p>Your Name:</p>
+      <input type="text" class="name" value="Sibby Dawidowitsch">
+      <p>Number of Travelers:</p>
+      <select id="num-travelers">
+      </select>
+      <label for="start-date">Trip Start Date</label>
+      <input type="date" id="start-date">
+      <label for="end-date">Trip End Date</label>
+      <input type="date" id="end-date">
+      <label for="destination-selector">
+      <select id="destination-selector">
+        <option>Please Select a Destintion</option>
+      </select>
+      <button type="button" class="request-trip-button">Request Trip</button>
+      <button type="button" class="hide confirm-trip-button">Confirm Trip</button>
+      </label>
+      </form>
+     </section>
+    `)
+    this.generateNumberOfTravelers()
+    this.generateDestinations()
+  }
+
+  generateNumberOfTravelers() {
+    const numTravelers = document.querySelector('#num-travelers')
+    const numberOfTravelers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    numberOfTravelers.forEach(number => {
+      numTravelers.insertAdjacentHTML('beforeend', `
+      <option>${number}</option>
+      `)
+    })
+  }
+
+  generateDestinations() {
+    const destinationSelector = document.querySelector('#destination-selector')
+    this.destinationsRepo.availableDestinations.forEach(destination => {
+      destinationSelector.insertAdjacentHTML('beforeend', `
+      <option>${destination.destination}</option>
+      `)
+    })
   }
 
   createAgencyDisplays(agency) {
@@ -106,6 +159,48 @@ class DomUpdates {
       <p class="currently-traveling">${currentTraveler.travelerName}</p>
       `)
     })
+  }
+
+  getFormData() {
+    const nameInput = document.querySelector('.name')
+    const numTravelers = document.querySelector('#num-travelers')
+    const startDate = document.querySelector('#start-date')
+    const endDate = document.querySelector('#end-date')
+    const destination = document.querySelector('#destination-selector')
+    return {
+      name: nameInput.value,
+      numTravelers: numTravelers.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+      destination: destination.value
+    }
+  }
+
+  displayRequestedTripCost(tripCost, trip) {
+    const tripForm = document.querySelector('.trip-form')
+    const confirmTripButton = document.querySelector('.confirm-trip-button')
+    const requestTripButton = document.querySelector('.request-trip-button')
+    confirmTripButton.classList.remove('hide')
+    requestTripButton.classList.add('hide')
+    tripForm.insertAdjacentHTML('beforeend', `
+    <p class="trip-cost">${tripCost}</p>
+    `)
+  }
+
+  getFullTripInfo(userName, numTravelers, startDate, endDate, destination) {
+    const fullUserInfo = this.travelersRepo.getUserByName(userName)
+    const fullDestinationInfo = this.destinationsRepo.getDestinationByName(destination)
+    const costMetrics = this.generateCostMetrics(startDate, endDate, numTravelers, fullDestinationInfo)
+    return
+  }
+
+  generateCostMetrics(startDate, endDate, numTravelers, fullDestination) {
+    const tripStart = moment(startDate)
+    const tripEnd = moment(endDate)
+    const tripLength = tripEnd.diff(tripStart, 'days')
+    const lodgingCost = this.destinationsRepo.getLodgingCost(fullDestination, tripLength)
+    const flightCost = this.destinationsRepo.getFlightCost(fullDestination, numTravelers)
+    return {tripLength: tripLength, lodging: lodgingCost, flight:flightCost}
   }
 }
 module.exports = DomUpdates
