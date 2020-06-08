@@ -17,6 +17,11 @@ class TripRepo {
   getPendingTrips(tripList) {
     return tripList.filter(trip => trip.status === 'pending')
   }
+
+  getTripByID(tripID) {
+    console.log(typeof tripID);
+    return this.trips.find(trip => trip.id === tripID)
+  }
 }
 
 module.exports = TripRepo

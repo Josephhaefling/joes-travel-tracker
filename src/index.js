@@ -14,7 +14,7 @@ import './images/turing-logo.png'
 import './images/planet-earth.jpg'
 
 const moment = require('moment')
-const todaysDate = '2020/01/02'
+const todaysDate = '2020/01/01'
 
 const loginButton = document.querySelector('.login-button')
 let domUpdates
@@ -109,6 +109,7 @@ const createAgency = () => {
   if (verifyPassword() === true) {
     const agency = new Agency(usersList)
     domUpdates.displayAppropriateUser('agency', agency)
+    createViewTripListener()
   } else {
     domUpdates.displayLoginError('password')
   }
@@ -198,4 +199,11 @@ const postTrip = (requestedTrip) => {
     }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
     domUpdates.greetUser('traveler', domUpdates.currentUser);
+}
+
+const createViewTripListener = () => {
+  const viewTripButtton = document.querySelector('.view-trip')
+  viewTripButtton.addEventListener('click', () => {
+    domUpdates.displayRequestedTrip()
+  })
 }

@@ -133,9 +133,10 @@ class DomUpdates {
     pendingTrips.forEach(trip => {
       pendingTripsDisplay.insertAdjacentHTML('beforeend', `
         <section class="pending-trip">
-          <p class="pending-trips">Date:${trip.date}</p>
-          <p class="pending-trips">Name:${trip.travelerName}</p>
-          <p class="pending-trips">Trip ID:${trip.id}</p>
+          <p class="pending-trips" id="${trip.id}">Date:${trip.date}</p>
+          <p class="pending-trips" id="${trip.id}">Name:${trip.travelerName}</p>
+          <p class="pending-trips" id="${trip.id}">Trip ID:${trip.id}</p>
+          <button type="button" class="view-trip" id="${trip.id}">View Trip</button>
         </section>
       `)
     })
@@ -154,7 +155,6 @@ class DomUpdates {
     const currentTravelers = document.querySelector('.current-travelers-display')
     const currentTravelersList = agency.getUsersTravelingList(this.todaysDate)
     currentTravelersList.forEach(currentTraveler => {
-      console.log(currentTraveler);
       currentTravelers.insertAdjacentHTML('beforeend', `
       <p class="currently-traveling">${currentTraveler.travelerName}</p>
       `)
@@ -201,6 +201,18 @@ class DomUpdates {
     const lodgingCost = this.destinationsRepo.getLodgingCost(fullDestination, tripLength)
     const flightCost = this.destinationsRepo.getFlightCost(fullDestination, numTravelers)
     return {tripLength: tripLength, lodging: lodgingCost, flight:flightCost}
+  }
+
+  displayRequestedTrip() {
+    const tripID = parseInt(event.target.id)
+    const requestedTrip = this.tripsRepo.getTripByID(tripID)
+    console.log(requestedTrip);
+    const   = document.querySelector('.agency-page')
+    agencyPage.insertAdjacentHTML('beforeend', `
+    <section class=${event.target.id} requested-trip>
+      <p>${requestedTrip}</p>
+    </section>
+     `)
   }
 }
 module.exports = DomUpdates
