@@ -205,5 +205,34 @@ const createViewTripListener = () => {
   const viewTripButtton = document.querySelector('.view-trip')
   viewTripButtton.addEventListener('click', () => {
     domUpdates.displayRequestedTrip()
+    createRequestedTripListeners()
   })
+}
+
+const createRequestedTripListeners = () => {
+  const approveTripButtton = document.querySelector('.approve-request-button')
+  const denyTripButtton = document.querySelector('.deny-request-button')
+  approveTripButtton.addEventListener('click', () => {
+    upDateTripStatus('approved', event.target.id)
+  })
+  denyTripButtton.addEventListener('click', () => {
+    upDateTripStatus('denied', event.target.id)
+  })
+}
+
+const upDateTripStatus = (newStatus, tripID) => {
+  const tripIDNum = parseInt(tripID);
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/updateTrip', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "id":tripIDNum,
+        "status": newStatus,
+        "suggestedActivities": []
+      })
+    }).then(response => console.log(response.json()))
+    .catch(err => console.error(err.message))
+    domUpdates.closeRequestedTripPage(tripID)
 }

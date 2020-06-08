@@ -12,7 +12,6 @@ class DestinationsRepo {
   }
 
   getLodgingCost(destination, numberOfDays) {
-    console.log();
     return destination.estimatedLodgingCostPerDay * numberOfDays
   }
 

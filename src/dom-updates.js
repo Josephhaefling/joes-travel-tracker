@@ -206,13 +206,23 @@ class DomUpdates {
   displayRequestedTrip() {
     const tripID = parseInt(event.target.id)
     const requestedTrip = this.tripsRepo.getTripByID(tripID)
-    console.log(requestedTrip);
-    const   = document.querySelector('.agency-page')
+    const agencyPage = document.querySelector('.agency-page')
     agencyPage.insertAdjacentHTML('beforeend', `
-    <section class=${event.target.id} requested-trip>
-      <p>${requestedTrip}</p>
+    <section class="requested-trip" id="${event.target.id}">
+      <section class=trip-info>
+      <p>Trip ID:${requestedTrip.id}</p>
+      <p>TripDate:${requestedTrip.date}</p>
+      <p>Number of Travelers:${requestedTrip.travelers}</p>
+      <button type="button" class="approve-request-button" id=${requestedTrip.id}>Approve Trip</button>
+      <button type="button" class="deny-request-button" id="${requestedTrip.id}">Deny Trip</button>
+      </section>
     </section>
      `)
+  }
+
+  closeRequestedTripPage(requestedTripID) {
+    const requestedTrip = document.querySelector('.requested-trip')
+    requestedTrip.classList.add('hide')
   }
 }
 module.exports = DomUpdates
