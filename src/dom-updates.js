@@ -203,9 +203,11 @@ class DomUpdates {
     return {tripLength: tripLength, lodging: lodgingCost, flight:flightCost}
   }
 
-  displayRequestedTrip() {
+  displayRequestedTrip(agecny) {
+    console.log('agency', agecny);
     const tripID = parseInt(event.target.id)
     const requestedTrip = this.tripsRepo.getTripByID(tripID)
+    console.log(requestedTrip);
     const agencyPage = document.querySelector('.agency-page')
     agencyPage.insertAdjacentHTML('beforeend', `
     <section class="requested-trip" id="${event.target.id}">

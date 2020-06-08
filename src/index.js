@@ -14,7 +14,7 @@ import './images/turing-logo.png'
 import './images/planet-earth.jpg'
 
 const moment = require('moment')
-const todaysDate = '2020/01/01'
+const todaysDate = moment().format("YYYY/MM/DD")
 
 const loginButton = document.querySelector('.login-button')
 let domUpdates
@@ -109,7 +109,7 @@ const createAgency = () => {
   if (verifyPassword() === true) {
     const agency = new Agency(usersList)
     domUpdates.displayAppropriateUser('agency', agency)
-    createViewTripListener()
+    createViewTripListener(agency)
   } else {
     domUpdates.displayLoginError('password')
   }
@@ -198,13 +198,15 @@ const postTrip = (requestedTrip) => {
       })
     }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
-    domUpdates.greetUser('traveler', domUpdates.currentUser);
+    // domUpdates.greetUser('traveler', domUpdates.currentUser);
+    const updatedUser = domUpdates.travelersRepo.getUserById(requestedTrip.userID)
+    createUser(updatedUser)
 }
 
-const createViewTripListener = () => {
+const createViewTripListener = (agency) => {
   const viewTripButtton = document.querySelector('.view-trip')
   viewTripButtton.addEventListener('click', () => {
-    domUpdates.displayRequestedTrip()
+    domUpdates.displayRequestedTrip(agency)
     createRequestedTripListeners()
   })
 }
@@ -217,6 +219,7 @@ const createRequestedTripListeners = () => {
   })
   denyTripButtton.addEventListener('click', () => {
     upDateTripStatus('denied', event.target.id)
+    deleteTrip(event.target.id)
   })
 }
 
@@ -235,4 +238,18 @@ const upDateTripStatus = (newStatus, tripID) => {
     }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
     domUpdates.closeRequestedTripPage(tripID)
+}
+
+const deleteTrip = (tripID) => {
+  const tripIDNum = parseInt(tripID);
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips', {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "id":tripIDNum,
+      })
+    }).then(response => console.log(response.json()))
+    .catch(err => console.error(err.message))
 }

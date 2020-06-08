@@ -87,5 +87,9 @@ describe('Agency', () => {
 
   it('should be able to get all of the users currently traveling', () => {
     expect(agency.getUsersTravelingList('2020/05/28')).to.deep.equal([trip5])
-  } )
+  })
+
+  it('should be able to get a user by name', () => {
+    expect(agency.getUserByName('Sibby Dawidowitsch')).to.deep.equal(user3)
+  })
 })

@@ -41,16 +41,8 @@ class Agency {
     }, [])
   }
 
-  getUserByName() {
-
-  }
-
-  deleteTrip() {
-
-  }
-
-  approveTrip() {
-
+  getUserByName(userName) {
+    return this.travelersRepo.find(traveler => traveler.name === userName)
   }
 }
 
