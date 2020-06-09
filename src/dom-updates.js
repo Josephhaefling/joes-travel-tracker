@@ -43,17 +43,65 @@ class DomUpdates {
     const presentTrips = this.tripsRepo.getTripsByDate(userTrips, 'presentTrips', this.todaysDate)
     const pendingTrips = this.tripsRepo.getPendingTrips(userTrips)
     this.displayTripsToDOM(pastTrips, presentTrips, futureTrips, pendingTrips)
+    this.getCompleteTrip(currentUser, userTrips)
     return userTrips
+  }
+
+  getCompleteTrip(currentUser, trips) {
+    if(currentUser.userTrips){
+      trips.forEach(trip => {
+        const formattedTripDate = trip.date.split("/").join("-")
+        const formattedTodaysDate = this.todaysDate.split("/").join("-")
+        const tripDate = moment(formattedTripDate)
+        const todaysDate = moment(formattedTodaysDate)
+        const completeTrip = currentUser.getTripByID(trip.id)
+        const comparedDate =todaysDate.diff(tripDate)
+        this.determineWhenIsTrip(completeTrip, comparedDate)
+      })
+    }
+  }
+
+  determineWhenIsTrip(completeTrip, comparedDate) {
+    if(completeTrip.status === 'pending') {
+      this.displayCompleteTripInfo(completeTrip, 'pending')
+    } else if (comparedDate < 0) {
+      this.displayCompleteTripInfo(completeTrip, 'future')
+    } else if (comparedDate > 0) {
+      this.displayCompleteTripInfo(completeTrip, 'past')
+    } else {
+      this.displayCompleteTripInfo(completeTrip, 'current')
+    }
+  }
+
+  displayCompleteTripInfo(trip, pastOrFuture) {
+    const typeOfTrip = document.querySelector(`.${pastOrFuture}-trips`)
+    typeOfTrip.insertAdjacentHTML('beforeend', `
+    <section class="users-trips js-${trip.id}">
+    <image class="destination-image" src="${trip.image}" alt="${trip.alt}">
+      <p class="user-info">${trip.destinationName}</p>
+      <p class="user-info">${trip.date}</p>
+    </section>
+    `)
   }
 
   displayTripsToDOM(pastTrips, presentTrips, futureTrips, pendingTrips) {
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend', `
     <section class="all-trips">
-      <section class="past-trips">You have ${pastTrips.length} past trips.</section>
-      <section class="present-trips">You have ${presentTrips.length} current trips.</section>
-      <section class="upcoming-trips">You have ${futureTrips.length} future trips.</section>
-      <section class="pending-trips">You have ${pendingTrips.length} pending trips.</section>
+      <section class="past-trips">
+        <p>You have ${pastTrips.length} past trips.</p>
+      </section>
+      <section class="present-trips">
+        <p>You have ${presentTrips.length} current trips.</p>
+      </section>
+      <section class="future-trips">
+        <p>You have ${futureTrips.length} future trips.</p>
+      </section>
+      <section class="pending-trips">
+        <p class="pending-trips-text "id="${pendingTrips.length}">
+          You have ${pendingTrips.length} pending trips.
+        </p>
+      </section>
     </section>
     `)
   }
@@ -74,6 +122,7 @@ class DomUpdates {
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend', `
     <section class="trip-request-form">
+    <h2>Request a New Trip</h2>
       <form class="trip-form">
       <p>Your Name:</p>
       <input type="text" class="name" value="Sibby Dawidowitsch">
@@ -185,6 +234,31 @@ class DomUpdates {
     }
   }
 
+  clearFormData() {
+    const requestTrip = document.querySelector('.request-trip-button')
+    const confirmTrip = document.querySelector('.confirm-trip-button')
+    let nameInput = document.querySelector('.name')
+    let numTravelers = document.querySelector('#num-travelers')
+    let startDate = document.querySelector('#start-date')
+    let endDate = document.querySelector('#end-date')
+    let destination = document.querySelector('#destination-selector')
+    this.addNewPendingTrip()
+    nameInput.value = 'Sibby Dawidowitsch'
+    numTravelers.value = '1'
+    startDate.value = 'mm/dd/yyyy'
+    endDate.value = 'mm/dd/yyyy'
+    destination.value = '1'
+    requestTrip.classList.remove('hide')
+    confirmTrip.classList.add('hide')
+  }
+
+  addNewPendingTrip() {
+    const pendingTrips = document.querySelector('.pending-trips')
+    const pendingTripsText = document.querySelector('.pending-trips-text')
+    const newText = parseInt(pendingTripsText.id) + 1
+    pendingTripsText.innerText = `You have ${newText} pending trips.`
+  }
+
   displayRequestedTripCost(tripCost, trip) {
     const tripForm = document.querySelector('.trip-form')
     const confirmTripButton = document.querySelector('.confirm-trip-button')
@@ -222,7 +296,6 @@ class DomUpdates {
     const requestedTripInfo = document.querySelector('.requested-trip')
     const agencyPage = document.querySelector('.agency-page')
     const tripToHide = document.querySelector(tripClass)
-    console.log(tripToHide);
     tripToHide.classList.add('hide')
     requestedTripInfo.classList.remove('hide')
     agencyPage.classList.add('hide')
@@ -265,13 +338,14 @@ class DomUpdates {
     const usersTrips = document.querySelector('.users-trips')
     requestedUsersTrips.forEach(trip => {
       usersTrips.insertAdjacentHTML('beforeend', `
-      <section class="trip ${trip.id}">
+      <section class="trip js-${trip.id}">
         <img class="destination-image" src="${trip.image}" alt="${trip.alt}>
         <p class="user-info" id="${trip.id}">${trip.destinationName}</p>
         <p class="user-info" id="${trip.id}">${trip.date}</p>
         <p class="user-info" id="${trip.id}">${trip.duration}</p>
         <p class="user-info" id="${trip.id}">${trip.status}</p>
         <p class="user-info" id="${trip.id}">${trip.travelers}</p>
+        <button type="button" class="delete-trip" id=${trip.id}>Cancel Trip</button>
       </section>
       `)
     })
@@ -290,6 +364,25 @@ class DomUpdates {
     const requestedUserPage = document.querySelector('.requested-user-page')
     agencyPage.classList.remove('hide')
     requestedUserPage.classList.add('hide')
+  }
+
+  cancelTrip() {
+    const tripID = event.target.id
+    const tripToCancel = `.js-${tripID}`
+    const tripToRemove = document.querySelector(tripToCancel)
+    tripToRemove.style.display = 'none'
+  }
+
+  addNewRequestedTrip(requestedTrip) {
+    const trip = requestedTrip
+    const pendingTrips = document.querySelector('.pending-trips')
+    pendingTrips.insertAdjacentHTML('beforeend', `
+    <section class="users-trips js-${trip.id}">
+    <image class="destination-image" src="${trip.image}" alt="${trip.alt}">
+      <p class="user-info">${trip.destinationName}</p>
+      <p class="user-info">${trip.date}</p>
+    </section>
+    `)
   }
 }
 module.exports = DomUpdates

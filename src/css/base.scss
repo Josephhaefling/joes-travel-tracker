@@ -260,11 +260,13 @@ h1 {
 
   .past-trips {
     @include tripsContainer(20%, 80%)
+    overflow-y: scroll;
+    scroll-behavior: smooth;
   }
   .present-trips {
     @include tripsContainer(20%, 80%)
   }
-  .upcoming-trips {
+  .future-trips {
     @include tripsContainer(20%, 80%)
   }
   .pending-trips {
@@ -290,6 +292,11 @@ h1 {
   .trip-info {
     background-color: $boxColor;
     }
+}
+
+.destination-image {
+  height: 50px;
+  width: 50px;
 }
 
 .hide {

@@ -177,6 +177,7 @@ const createConfirmTripListener = (requestedTrip) => {
   const confirmTripButton = document.querySelector('.confirm-trip-button')
   confirmTripButton.addEventListener('click', () => {
     postTrip(requestedTrip)
+    createNewTrip(requestedTrip)
   })
 }
 
@@ -201,7 +202,8 @@ const postTrip = (requestedTrip) => {
   }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
   const updatedUser = domUpdates.travelersRepo.getUserById(requestedTrip.userID)
-  createUser(updatedUser)
+  domUpdates.clearFormData()
+  // createUser(updatedUser)
 }
 
 const createViewTripListener = () => {
@@ -271,6 +273,7 @@ const getUserByName = () => {
   const requestedUser = agency.getUserByName(userName)
   domUpdates.displaySearchedUser(requestedUser);
   domUpdates.generateUsersTrips(requestedUser.userTrips)
+  createCancelListeners()
   createCloseListeners()
 }
 
@@ -280,3 +283,25 @@ const createCloseListeners = () => {
     domUpdates.hideSearchedUserInfo()
   })
 }
+
+const createCancelListeners = () => {
+  const cancelTripButton = document.querySelector('.delete-trip')
+
+  const requestedUserInfo = document.querySelector('.requested-user-info')
+  requestedUserInfo.addEventListener('click', () => {
+    domUpdates.cancelTrip()
+    deleteTrip(cancelTripButton.id)
+    })
+}
+
+const createNewTrip = (requestedTrip) => {
+  const destination = domUpdates.destinationsRepo.getDesiredDestination(requestedTrip.destinationID)
+  console.log(destination);
+  requestedTrip.image = destination.image
+  requestedTrip.alt = destination.alt
+  requestedTrip.destinationName = destination.destination
+  domUpdates.addNewRequestedTrip(requestedTrip)
+}
+
+//Get full trip
+//generate userTrips
