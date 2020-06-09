@@ -11,15 +11,15 @@ class DestinationsRepo {
     return this.availableDestinations.find(destination => destination.destination === destinationName)
   }
 
-  getLodgingCost(destination, numberOfDays) {
-    console.log();
+  getLodgingCost(destination, numDays) {
+    const numberOfDays = numDays || 0
     return destination.estimatedLodgingCostPerDay * numberOfDays
   }
 
-  getFlightCost(destination, numberOfTravelers) {
+  getFlightCost(destination, numTravelers) {
+    const numberOfTravelers = numTravelers || 0
     return destination.estimatedFlightCostPerPerson * numberOfTravelers
   }
-
 }
 
 module.exports = DestinationsRepo

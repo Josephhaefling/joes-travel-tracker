@@ -28,7 +28,7 @@ it('should be a function', () => {
   expect(Trip).to.be.a('function')
   })
 
-  it('should be able to return the total cost of a trip', () => {
-    expect(trip.getTripCost()).to.equal(1056)
+it('should be able to return the total cost of a trip', () => {
+  expect(trip.getTripCost()).to.equal(1056)
   })
 })

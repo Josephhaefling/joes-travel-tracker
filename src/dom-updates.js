@@ -36,7 +36,6 @@ class DomUpdates {
   }
 
   getAllUserTrips(currentUser) {
-    console.log(currentUser);
     const userTrips = this.tripsRepo.getTripsByUserID(currentUser.id)
     const pastTrips = this.tripsRepo.getTripsByDate(userTrips, 'pastTrips', this.todaysDate)
     const futureTrips = this.tripsRepo.getTripsByDate(userTrips, 'futureTrips', this.todaysDate)
@@ -59,6 +58,7 @@ class DomUpdates {
   }
 
   displayTotalSpent(currentUser) {
+    console.log(currentUser);
     const totalSpent = currentUser.getTotalCostOfAllTrips()
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend',`

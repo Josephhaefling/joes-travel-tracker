@@ -40,18 +40,6 @@ class Agency {
       return currentTravelers
     }, [])
   }
-
-  getUserByName() {
-
-  }
-
-  deleteTrip() {
-
-  }
-
-  approveTrip() {
-
-  }
 }
 
 module.exports = Agency

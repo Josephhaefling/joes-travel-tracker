@@ -38,7 +38,9 @@ describe('Agency', () => {
   let user1
   let user2
   let user3
+  let user4
   let agency
+  let agency1
 
   beforeEach(() => {
     destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
@@ -70,7 +72,9 @@ describe('Agency', () => {
     user1 = new User(TestData.sampleUsers[0], destinationsRepo, [trip1, trip4])
     user2 = new User(TestData.sampleUsers[1], destinationsRepo, [trip2])
     user3 = new User(TestData.sampleUsers[2], destinationsRepo, [trip3, trip5, trip6])
+    user4 = new User(TestData.sampleUsers[2], destinationsRepo, [trip1])
     agency = new Agency([user1, user2, user3])
+    agency1 = new Agency([user4])
   })
 
   it('should be a function', () => {
@@ -81,11 +85,19 @@ describe('Agency', () => {
     expect(agency.getPendingTrips()).to.deep.equal([trip2, trip3])
   })
 
+  it('should be able to get all pedning trips', ()=> {
+    expect(agency1.getPendingTrips()).to.deep.equal([])
+  })
+
   it('should be able to get the agencys totoal income for the year', ()=> {
     expect(agency.getYearlyIncome()).to.equal(2844)
   })
 
   it('should be able to get all of the users currently traveling', () => {
     expect(agency.getUsersTravelingList('2020/05/28')).to.deep.equal([trip5])
+  } )
+
+  it('should be able to get all of the users currently traveling', () => {
+    expect(agency1.getUsersTravelingList('2020/05/28')).to.deep.equal([])
   } )
 })
