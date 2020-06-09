@@ -77,7 +77,7 @@ describe('Agency', () => {
     expect(Agency).to.be.a('function')
   })
 
-  it('should be able to get all requested trips', ()=> {
+  it('should be able to get all pedning trips', ()=> {
     expect(agency.getPendingTrips()).to.deep.equal([trip2, trip3])
   })
 

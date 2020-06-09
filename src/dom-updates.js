@@ -36,6 +36,7 @@ class DomUpdates {
   }
 
   getAllUserTrips(currentUser) {
+    console.log(currentUser);
     const userTrips = this.tripsRepo.getTripsByUserID(currentUser.id)
     const pastTrips = this.tripsRepo.getTripsByDate(userTrips, 'pastTrips', this.todaysDate)
     const futureTrips = this.tripsRepo.getTripsByDate(userTrips, 'futureTrips', this.todaysDate)
@@ -154,7 +155,6 @@ class DomUpdates {
     const currentTravelers = document.querySelector('.current-travelers-display')
     const currentTravelersList = agency.getUsersTravelingList(this.todaysDate)
     currentTravelersList.forEach(currentTraveler => {
-      console.log(currentTraveler);
       currentTravelers.insertAdjacentHTML('beforeend', `
       <p class="currently-traveling">${currentTraveler.travelerName}</p>
       `)

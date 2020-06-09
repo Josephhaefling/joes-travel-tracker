@@ -60,8 +60,11 @@ describe('DomUpdates', () => {
     expect(tripRepo.getTripsByUserID).to.have.been.called.with(3)
   })
 
-  // it.only('should return all users trips', () => {
-  //   chai.spy.on(domUpdates, 'getAllUserTrips', () => {})
-  //   expect(domUpdates.getAllUserTrips(3)).to.equal([])
-  // })
+  it.only('should run getTripsByDate three times', () => {
+    chai.spy.on(tripRepo, ['getAllUserTrips', 'getTripsByDate'], () => {})
+    tripRepo.getAllUserTrips(user)
+    expect(tripRepo.getTripsByDate).to.have.been.called(3)
+  })
+
+
 })
