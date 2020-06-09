@@ -20,12 +20,12 @@ class DomUpdates {
 
   greetUser(userType, currentUser) {
     if (userType === 'traveler') {
-    this.getAllUserTrips(currentUser)
-    this.displayTotalSpent(currentUser)
-  } else {
-    this.currentUser = currentUser
-    this.createAgencyDisplays(currentUser)
-  }
+      this.getAllUserTrips(currentUser)
+      this.displayTotalSpent(currentUser)
+    } else {
+      this.currentUser = currentUser
+      this.createAgencyDisplays(currentUser)
+    }
     const userGreeting = document.querySelector(`.${userType}-greeting`)
     const travelerFirstName = currentUser.name.split(' ')[0];
     userGreeting.innerText = `Welcome Back ${travelerFirstName}`
@@ -61,7 +61,7 @@ class DomUpdates {
   displayTotalSpent(currentUser) {
     const totalSpent = currentUser.getTotalCostOfAllTrips()
     const travelerPage = document.querySelector('.traveler-page')
-    travelerPage.insertAdjacentHTML('beforeend',`
+    travelerPage.insertAdjacentHTML('beforeend', `
     <section class="total-spent">
       <p class="total">${totalSpent}</p>
     <section>
@@ -122,7 +122,7 @@ class DomUpdates {
     agencyPage.insertAdjacentHTML('beforeend', `
     <section class="user-search">
     <input type="text" class="user-name-input" value="Sibby Dawidowitsch">
-    <button type="button" class="search-user-button">View Trip</button>
+    <button type="button" class="search-user-button">Search User</button>
     </section>
     <section class="pending-trips-display"></section>
     <section class="total-revenue-display"></section>
@@ -132,15 +132,19 @@ class DomUpdates {
     this.displayRevenue()
   }
 
+
   displayPendingTrips() {
     const pendingTripsDisplay = document.querySelector('.pending-trips-display')
     const pendingTrips = this.currentUser.getPendingTrips()
     pendingTrips.forEach(trip => {
       pendingTripsDisplay.insertAdjacentHTML('beforeend', `
-        <section class="pending-trip">
-          <p class="pending-trips" id="${trip.id}">Date:${trip.date}</p>
-          <p class="pending-trips" id="${trip.id}">Name:${trip.travelerName}</p>
-          <p class="pending-trips" id="${trip.id}">Trip ID:${trip.id}</p>
+        <section class="pending-trip" id="js-${trip.id}">
+          <p class="pending-trips" id="${trip.id}" >Name:${trip.travelerName}</p>
+          <p class="user-info" >${trip.destinationName}</p>
+          <p class="pending-trips" >Date:${trip.date}</p>
+          <p class="user-info" >${trip.duration}</p>
+          <p class="user-info" >${trip.status}</p>
+          <p class="user-info" >${trip.travelers}</p>
           <button type="button" class="view-trip" id="${trip.id}">View Trip</button>
         </section>
       `)
@@ -205,33 +209,40 @@ class DomUpdates {
     const tripLength = tripEnd.diff(tripStart, 'days')
     const lodgingCost = this.destinationsRepo.getLodgingCost(fullDestination, tripLength)
     const flightCost = this.destinationsRepo.getFlightCost(fullDestination, numTravelers)
-    return {tripLength: tripLength, lodging: lodgingCost, flight:flightCost}
+    return {tripLength, lodging: lodgingCost, flight: flightCost}
   }
 
   displayRequestedTrip() {
     const tripID = parseInt(event.target.id)
+    const tripClass = `#${event.target.parentElement.id}`
     const requestedTrip = this.tripsRepo.getTripByID(tripID)
     const userName = this.travelersRepo.getUserById(requestedTrip.userID)
     const userRequestingTrip = this.currentUser.getUserByName(userName.name)
     const fullRequestedTrip = userRequestingTrip.getTripByID(tripID)
+    const requestedTripInfo = document.querySelector('.requested-trip')
     const agencyPage = document.querySelector('.agency-page')
-    agencyPage.insertAdjacentHTML('beforeend', `
-    <section class="requested-trip" id="${event.target.id}">
+    const tripToHide = document.querySelector(tripClass)
+    console.log(tripToHide);
+    tripToHide.classList.add('hide')
+    requestedTripInfo.classList.remove('hide')
+    agencyPage.classList.add('hide')
+    requestedTripInfo.insertAdjacentHTML('beforeend', `
       <section class=trip-info>
-      <p>User Name:${fullRequestedTrip.travelerName}
+      <p>User Name:${fullRequestedTrip.travelerName}</p>
       <p>Trip ID:${fullRequestedTrip.id}</p>
       <p>TripDate:${fullRequestedTrip.date}</p>
       <p>Number of Travelers:${fullRequestedTrip.travelers}</p>
       <button type="button" class="approve-request-button" id=${requestedTrip.id}>Approve Trip</button>
       <button type="button" class="deny-request-button" id="${requestedTrip.id}">Deny Trip</button>
       </section>
-    </section>
      `)
   }
 
   closeRequestedTripPage(requestedTripID) {
     const requestedTrip = document.querySelector('.requested-trip')
+    const agencyPage = document.querySelector('.agency-page')
     requestedTrip.classList.add('hide')
+    agencyPage.classList.remove('hide')
   }
 
   displaySearchedUser(requestedUser) {
@@ -242,6 +253,7 @@ class DomUpdates {
     requestedUserPage.classList.remove('hide')
     requestedUserPage.insertAdjacentHTML('beforeend', `
       <section class="requested-user-info">
+        <button type="button" class="close-button">Close Search</button>
         <p class="user-name">Name: ${requestedUser.name}</p>
         <p class="user-spent">Total Spent: ${totalSpent}</p>
         <section class="users-trips"></section>
@@ -249,9 +261,9 @@ class DomUpdates {
     `)
   }
 
-    generateUsersTrips(requestedUsersTrips) {
-      const usersTrips = document.querySelector('.users-trips')
-      requestedUsersTrips.forEach(trip => {
+  generateUsersTrips(requestedUsersTrips) {
+    const usersTrips = document.querySelector('.users-trips')
+    requestedUsersTrips.forEach(trip => {
       usersTrips.insertAdjacentHTML('beforeend', `
       <section class="trip ${trip.id}">
         <img class="destination-image" src="${trip.image}" alt="${trip.alt}>
@@ -263,6 +275,21 @@ class DomUpdates {
       </section>
       `)
     })
+  }
+
+  removeRequestedTrip() {
+    const tripID = event.target.parentElement
+    const requestedTripID = `#${event.target.id}`
+    const tripInfoCard =`.${tripID.classList.value}`
+    const tripToHide = document.querySelector(tripInfoCard)
+    tripToHide.classList.add('hide')
+  }
+
+  hideSearchedUserInfo() {
+    const agencyPage = document.querySelector('.agency-page')
+    const requestedUserPage = document.querySelector('.requested-user-page')
+    agencyPage.classList.remove('hide')
+    requestedUserPage.classList.add('hide')
   }
 }
 module.exports = DomUpdates

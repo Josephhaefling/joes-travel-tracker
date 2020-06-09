@@ -3,7 +3,7 @@ class Trip {
     this.id = tripInfo.id
     this.userID = tripInfo.userID
     this.destinationID = tripInfo.destinationID,
-    this.destinationName = destination.destination
+    this.destinationName = destination.destination || null,
     this.travelers = tripInfo.travelers,
     this.date = tripInfo.date,
     this.duration = tripInfo.duration,
@@ -12,13 +12,13 @@ class Trip {
     this.status = tripInfo.status,
     this.suggestedActivities = tripInfo.suggestedActivities
     this.travelerName = travelerName
-    this.image = destination.image
-    this.alt = destination.alt
+    this.image = destination.image || null,
+    this.alt = destination.alt || null
   }
 
   getTripCost() {
-    const flightPlusFee = this.flightCost * .10 +this.flightCost
-    const lodgingPlusFee = this.lodgingCost * .10 +this.lodgingCost
+    const flightPlusFee = this.flightCost * .10 + this.flightCost
+    const lodgingPlusFee = this.lodgingCost * .10 + this.lodgingCost
     return lodgingPlusFee + flightPlusFee
   }
 }
