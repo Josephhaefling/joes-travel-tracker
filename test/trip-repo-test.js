@@ -42,6 +42,10 @@ describe('Trip', () => {
     expect(tripRepo.getPendingTrips(tripList)).to.deep.equal([tripList[0]])
   })
 
+  it('should be able to get a trip by its ID', () => {
+    expect(tripRepo.getTripByID(3)).to.deep.equal(tripRepo.trips[2])
+  })
+
   // it('if no date is searched it should search by todays date', () => {
   //   let tripList = tripRepo.getTripsByUserID(3)
   //   // console.log(tripsDate[10].date = new Date(tripsData[10].date))

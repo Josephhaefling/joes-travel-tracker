@@ -9,8 +9,8 @@ describe('User', () => {
   let user
   let tripsData
   let destination1
-  let destination2
-  let destination3
+  // let destination2
+  // let destination3
   let lodgingCost1
   let lodgingCost2
   let lodgingCost3
@@ -22,21 +22,21 @@ describe('User', () => {
   let trip3
   let destinationsRepo
   let sampleUsers = TestData.sampleUsers
-  let destinations = TestData.sampleDestinations
+  // let destinations = TestData.sampleDestinations
   let userTrips
 
   beforeEach(() => {
-  tripsData = TestData.sampleTrips
-  destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
-  destination1 = destinationsRepo.getDesiredDestination(tripsData[2].destinationID)
-  destination2 = destinationsRepo.getDesiredDestination(tripsData[6].destinationID)
-  destination3 = destinationsRepo.getDesiredDestination(tripsData[7].destinationID)
-  lodgingCost1 = destinationsRepo.getLodgingCost(destination1, tripsData[2].duration)
-  lodgingCost2 = destinationsRepo.getLodgingCost(destination1, tripsData[6].duration)
-  lodgingCost3 = destinationsRepo.getLodgingCost(destination1, tripsData[7].duration)
-  flightCost1 = destinationsRepo.getFlightCost(destination1, tripsData[2].travelers)
-  flightCost2 = destinationsRepo.getFlightCost(destination1, tripsData[6].travelers)
-  flightCost3 = destinationsRepo.getFlightCost(destination1, tripsData[7].travelers)
+    tripsData = TestData.sampleTrips
+    destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
+    destination1 = destinationsRepo.getDesiredDestination(tripsData[2].destinationID)
+    // destination2 = destinationsRepo.getDesiredDestination(tripsData[6].destinationID)
+    // destination3 = destinationsRepo.getDesiredDestination(tripsData[7].destinationID)
+    lodgingCost1 = destinationsRepo.getLodgingCost(destination1, tripsData[2].duration)
+    lodgingCost2 = destinationsRepo.getLodgingCost(destination1, tripsData[6].duration)
+    lodgingCost3 = destinationsRepo.getLodgingCost(destination1, tripsData[7].duration)
+    flightCost1 = destinationsRepo.getFlightCost(destination1, tripsData[2].travelers)
+    flightCost2 = destinationsRepo.getFlightCost(destination1, tripsData[6].travelers)
+    flightCost3 = destinationsRepo.getFlightCost(destination1, tripsData[7].travelers)
     trip1 = new Trip(TestData.sampleTrips[2], lodgingCost1, flightCost1)
     trip2 = new Trip(TestData.sampleTrips[6], lodgingCost2, flightCost2)
     trip3 = new Trip(TestData.sampleTrips[7], lodgingCost3, flightCost3)
@@ -59,6 +59,10 @@ describe('User', () => {
 
   it('should be able to get pendingTrips', () => {
     expect(user.getPendingTrips()).to.deep.equal([userTrips[0]])
+  })
+
+  it('should be able to get a users trip by id', () => {
+    expect(user.getTripByID(7)).to.deep.equal(trip2)
   })
 
 })

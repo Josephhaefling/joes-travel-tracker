@@ -14,7 +14,7 @@ import './images/turing-logo.png'
 import './images/planet-earth.jpg'
 
 const moment = require('moment')
-const todaysDate = '2020/01/02'
+const todaysDate = moment().format("YYYY/MM/DD")
 
 const loginButton = document.querySelector('.login-button')
 let domUpdates
@@ -28,8 +28,8 @@ Promise.all([
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips').then(response => response.json()),
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/destinations/destinations').then(response => response.json())
 ])
-.then(data => createDataSets(data[0], data[1], data[2]))
-.catch(err => console.error(err.message))
+  .then(data => createDataSets(data[0], data[1], data[2]))
+  .catch(err => console.error(err.message))
 
 
 const createDataSets = (travelersData, tripsData, destinationsData) => {
@@ -87,7 +87,7 @@ const verifyUserName = (verifiedTraveler) => {
 const createUser = (travelerInfo) => {
   const destinationsRepo = domUpdates.destinationsRepo
   const userTrips = createUsersTrips(travelerInfo)
-    const currentUser = new User(travelerInfo, destinationsRepo, userTrips)
+  const currentUser = new User(travelerInfo, destinationsRepo, userTrips)
   domUpdates.displayAppropriateUser('traveler', currentUser, userTrips)
   createRequestTripListener()
 }
@@ -99,16 +99,19 @@ const createUsersTrips = (travelerInfo) => {
     const destination = destinationsRepo.getDesiredDestination(trip.destinationID)
     const lodgingCost = destinationsRepo.getLodgingCost(destination, trip.duration)
     const flightCost = destinationsRepo.getFlightCost(destination, trip.travelers)
-    const userTrip = new Trip(trip, lodgingCost, flightCost, travelerInfo.name)
+    const userTrip = new Trip(trip, lodgingCost, flightCost, travelerInfo.name, destination)
     return userTrip
   })
 }
 
-const createAgency = () => {
+const createAgency = (autoLogin) => {
+  const loginAutomatically = autoLogin || false
   const usersList = createUsersForAgency();
-  if (verifyPassword() === true) {
+  if (verifyPassword() === true || autoLogin === true) {
     const agency = new Agency(usersList)
     domUpdates.displayAppropriateUser('agency', agency)
+    createViewTripListener()
+    createSearchByUserListener()
   } else {
     domUpdates.displayLoginError('password')
   }
@@ -127,8 +130,8 @@ const createUsersForAgency = () => {
 
 const verifyPassword = () => {
   const password = document.querySelector('.password')
-  if(password) {
-  return password.value === 'travel2020' ? true : false;
+  if (password) {
+    return password.value === 'travel2020' ? true : false;
   }
 }
 
@@ -160,11 +163,11 @@ const getTripInfo = () => {
     status: "pending",
     suggestedActivities: [],
   }
-    getEstimatedCost(requestedTrip, costMetrics, fullUser.name)
+  getEstimatedCost(requestedTrip, costMetrics, fullUser.name)
 }
 
 const getEstimatedCost = (tripInfo, costMetrics, fullUser) => {
-  const requestedTrip = new Trip(tripInfo, costMetrics.lodging, costMetrics.flight, fullUser)
+  const requestedTrip = new Trip(tripInfo, costMetrics.lodging, costMetrics.flight, fullUser, '')
   const tripCost = requestedTrip.getTripCost()
   domUpdates.displayRequestedTripCost(tripCost)
   createConfirmTripListener(requestedTrip)
@@ -174,6 +177,7 @@ const createConfirmTripListener = (requestedTrip) => {
   const confirmTripButton = document.querySelector('.confirm-trip-button')
   confirmTripButton.addEventListener('click', () => {
     postTrip(requestedTrip)
+    createNewTrip(requestedTrip)
   })
 }
 
@@ -181,21 +185,123 @@ const postTrip = (requestedTrip) => {
   const date = moment(requestedTrip.date).format("YYYY/MM/DD").toString();
   const travelers = parseInt(requestedTrip.travelers)
   fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        "id": requestedTrip.id,
-        "userID": requestedTrip.userID,
-        "destinationID": requestedTrip.destinationID,
-        "travelers": travelers,
-        "date": date,
-        "duration": requestedTrip.duration,
-        "status": requestedTrip.status,
-        "suggestedActivities": requestedTrip.suggestedActivities
-      })
-    }).then(response => console.log(response.json()))
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "id": requestedTrip.id,
+      "userID": requestedTrip.userID,
+      "destinationID": requestedTrip.destinationID,
+      travelers,
+      date,
+      "duration": requestedTrip.duration,
+      "status": requestedTrip.status,
+      "suggestedActivities": requestedTrip.suggestedActivities
+    })
+  }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
-    domUpdates.greetUser('traveler', domUpdates.currentUser);
+  const updatedUser = domUpdates.travelersRepo.getUserById(requestedTrip.userID)
+  domUpdates.clearFormData()
+  // createUser(updatedUser)
 }
+
+const createViewTripListener = () => {
+  const pendingTripsDisplay = document.querySelector('.pending-trips-display')
+  pendingTripsDisplay.addEventListener('click', () => {
+    domUpdates.displayRequestedTrip()
+    createRequestedTripListeners()
+  })
+}
+
+const createSearchByUserListener = () => {
+  const userNameInput = document.querySelector('.user-name-input')
+  const searchUserButton = document.querySelector('.search-user-button')
+  searchUserButton.addEventListener('click', () => {
+    getUserByName()
+  })
+}
+
+const createRequestedTripListeners = () => {
+  const approveTripButtton = document.querySelector('.approve-request-button')
+  const denyTripButtton = document.querySelector('.deny-request-button')
+  approveTripButtton.addEventListener('click', () => {
+    upDateTripStatus('approved', event.target.id)
+    domUpdates.removeRequestedTrip()
+  })
+  denyTripButtton.addEventListener('click', () => {
+    upDateTripStatus('denied', event.target.id)
+    deleteTrip(event.target.id)
+  })
+}
+
+const upDateTripStatus = (newStatus, tripID) => {
+  const tripIDNum = parseInt(tripID);
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/updateTrip', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "id": tripIDNum,
+      "status": newStatus,
+      "suggestedActivities": []
+    })
+  }).then(response => console.log(response.json()))
+    .catch(err => console.error(err.message))
+  domUpdates.closeRequestedTripPage(tripID)
+}
+
+const deleteTrip = (tripID) => {
+  const tripIDNum = parseInt(tripID);
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips', {
+    method: 'DELETE',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "id": tripIDNum,
+    })
+  }).then(response => console.log(response.json()))
+    .catch(err => console.error(err.message))
+}
+
+const getUserByName = () => {
+  const userNameInput = document.querySelector('.user-name-input')
+  const userName = userNameInput.value
+  const agency = domUpdates.currentUser
+  const requestedUser = agency.getUserByName(userName)
+  domUpdates.displaySearchedUser(requestedUser);
+  domUpdates.generateUsersTrips(requestedUser.userTrips)
+  createCancelListeners()
+  createCloseListeners()
+}
+
+const createCloseListeners = () => {
+  const closeButton = document.querySelector('.close-button')
+  closeButton.addEventListener('click', () => {
+    domUpdates.hideSearchedUserInfo()
+  })
+}
+
+const createCancelListeners = () => {
+  const cancelTripButton = document.querySelector('.delete-trip')
+
+  const requestedUserInfo = document.querySelector('.requested-user-info')
+  requestedUserInfo.addEventListener('click', () => {
+    domUpdates.cancelTrip()
+    deleteTrip(cancelTripButton.id)
+    })
+}
+
+const createNewTrip = (requestedTrip) => {
+  const destination = domUpdates.destinationsRepo.getDesiredDestination(requestedTrip.destinationID)
+  console.log(destination);
+  requestedTrip.image = destination.image
+  requestedTrip.alt = destination.alt
+  requestedTrip.destinationName = destination.destination
+  domUpdates.addNewRequestedTrip(requestedTrip)
+}
+
+//Get full trip
+//generate userTrips
