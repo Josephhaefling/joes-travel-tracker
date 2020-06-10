@@ -19,20 +19,20 @@ class User {
   }
 
   getTotalCostOfAllTrips() {
-    if(this.userTrips) {
-    return this.userTrips.reduce((totalSpent, trip) => {
-      const tripCost = trip.getTripCost()
-      totalSpent += tripCost
-      return totalSpent
-    }, 0)
-  } else {
-    return 0
-  }
+    if (this.userTrips) {
+      return this.userTrips.reduce((totalSpent, trip) => {
+        const tripCost = trip.getTripCost()
+        totalSpent += tripCost
+        return totalSpent
+      }, 0)
+    } else {
+      return 0
+    }
   }
 
   getPendingTrips() {
     if (this.userTrips) {
-  return this.userTrips.filter(userTrip => userTrip.status === 'pending')
+      return this.userTrips.filter(userTrip => userTrip.status === 'pending')
     }
   }
 

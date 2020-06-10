@@ -39,7 +39,7 @@ describe('Trip', () => {
 
   it('should return an empty array if no date is passed', () => {
     let tripList = tripRepo.getTripsByUserID(3)
-    expect(tripRepo.getTripsByDate(tripList, 'presentTrips')).to.equal([])
+    expect(tripRepo.getTripsByDate(tripList, 'presentTrips')).to.deep.equal([])
   })
 
   it('should return undefined if no search type is passed', () => {
@@ -48,7 +48,6 @@ describe('Trip', () => {
   })
 
   it('should return undefined if no trip list is passed', () => {
-    let tripList = tripRepo.getTripsByUserID(3)
     expect(tripRepo.getTripsByDate('', 'presentTrips', '2021/02/07')).to.equal(undefined)
   })
 
@@ -58,10 +57,9 @@ describe('Trip', () => {
   })
 
   it('should be able to get pending trips', () => {
-    let tripList = tripRepo.getTripsByUserID(3)
     expect(tripRepo.getPendingTrips()).to.equal(undefined)
   })
-  
+
   it('should be able to get a trip by its ID', () => {
     expect(tripRepo.getTripByID(3)).to.deep.equal(tripRepo.trips[2])
   })

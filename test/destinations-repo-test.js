@@ -28,7 +28,6 @@ describe('DestinationsRepo', () => {
   })
 
   it('should return NaN if a destination is not passed', () => {
-    const destination = destinationsRepo.getDesiredDestination(2)
     expect(destinationsRepo.getLodgingCost('', 2)).to.deep.equal(NaN)
   })
 
@@ -43,7 +42,6 @@ describe('DestinationsRepo', () => {
   })
 
   it('should return NaN if no destination is passed', () => {
-    const destination = destinationsRepo.getDesiredDestination(2)
     expect(destinationsRepo.getFlightCost('', 2)).to.deep.equal(NaN)
   })
 

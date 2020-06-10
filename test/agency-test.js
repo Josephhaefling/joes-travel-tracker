@@ -6,9 +6,7 @@ import Trip from '../src/trip'
 import TripRepo from '../src/trip-repo'
 import DestinationsRepo from '../src/destinations-repo'
 
-//instantiate users
 describe('Agency', () => {
-  let sampleUsers
   let destinationsRepo
   let tripRepo
   let destination1
@@ -63,12 +61,12 @@ describe('Agency', () => {
     flightCost4 = destinationsRepo.getFlightCost(destination4, TestData.sampleTrips[5].travelers)
     flightCost5 = destinationsRepo.getFlightCost(destination5, TestData.sampleTrips[6].travelers)
     flightCost6 = destinationsRepo.getFlightCost(destination6, TestData.sampleTrips[7].travelers)
-    trip1 = new Trip(TestData.sampleTrips[0], lodgingCost1, flightCost1, '')
-    trip2 = new Trip(TestData.sampleTrips[1], lodgingCost2, flightCost2, '')
-    trip3 = new Trip(TestData.sampleTrips[2], lodgingCost3, flightCost3, '')
-    trip4 = new Trip(TestData.sampleTrips[5], lodgingCost4, flightCost4, '')
-    trip5 = new Trip(TestData.sampleTrips[6], lodgingCost5, flightCost5, '')
-    trip6 = new Trip(TestData.sampleTrips[7], lodgingCost6, flightCost6, '')
+    trip1 = new Trip(TestData.sampleTrips[0], lodgingCost1, flightCost1, '', '')
+    trip2 = new Trip(TestData.sampleTrips[1], lodgingCost2, flightCost2, '', '')
+    trip3 = new Trip(TestData.sampleTrips[2], lodgingCost3, flightCost3, '', '')
+    trip4 = new Trip(TestData.sampleTrips[5], lodgingCost4, flightCost4, '', '')
+    trip5 = new Trip(TestData.sampleTrips[6], lodgingCost5, flightCost5, '', '')
+    trip6 = new Trip(TestData.sampleTrips[7], lodgingCost6, flightCost6, '', '')
     user1 = new User(TestData.sampleUsers[0], destinationsRepo, [trip1, trip4])
     user2 = new User(TestData.sampleUsers[1], destinationsRepo, [trip2])
     user3 = new User(TestData.sampleUsers[2], destinationsRepo, [trip3, trip5, trip6])

@@ -1,7 +1,3 @@
-// This is the JavaScript entry file - your code begins here
-// Do not delete or rename this file ********
-
-// An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss'
 import TravelersRepo from '../src/travelers-repo'
 import DestinationsRepo from '../src/destinations-repo'
@@ -24,9 +20,12 @@ loginButton.addEventListener('click', () => {
 })
 
 Promise.all([
-  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers').then(response => response.json()),
-  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips').then(response => response.json()),
-  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/destinations/destinations').then(response => response.json())
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/travelers/travelers')
+    .then(response => response.json()),
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/trips/trips')
+    .then(response => response.json()),
+  fetch('https://fe-apps.herokuapp.com/api/v1/travel-tracker/data/destinations/destinations')
+    .then(response => response.json())
 ])
   .then(data => createDataSets(data[0], data[1], data[2]))
   .catch(err => console.error(err.message))
@@ -70,7 +69,6 @@ const parseUserId = (userName) => {
 }
 
 const getUserInfo = (userIDToVerify, travelersRepo) => {
-  const userName = document.querySelector('.user-name')
   const verifiedTraveler = travelersRepo.getUserById(userIDToVerify)
   verifyUserName(verifiedTraveler)
 }
@@ -78,7 +76,11 @@ const getUserInfo = (userIDToVerify, travelersRepo) => {
 
 const verifyUserName = (verifiedTraveler) => {
   if (verifiedTraveler) {
-    verifyPassword() === true ? createUser(verifiedTraveler) : domUpdates.displayLoginError('password')
+    if (verifyPassword() === true) {
+      createUser(verifiedTraveler)
+    } else {
+      domUpdates.displayLoginError('password')
+    }
   } else {
     domUpdates.displayLoginError('user-name')
   }
@@ -104,10 +106,9 @@ const createUsersTrips = (travelerInfo) => {
   })
 }
 
-const createAgency = (autoLogin) => {
-  const loginAutomatically = autoLogin || false
+const createAgency = () => {
   const usersList = createUsersForAgency();
-  if (verifyPassword() === true || autoLogin === true) {
+  if (verifyPassword() === true) {
     const agency = new Agency(usersList)
     domUpdates.displayAppropriateUser('agency', agency)
     createViewTripListener()
@@ -119,7 +120,6 @@ const createAgency = (autoLogin) => {
 
 const createUsersForAgency = () => {
   const destinationsRepo = domUpdates.destinationsRepo
-  const tripsRepo = domUpdates.tripsRepo
   const travelersRepo = domUpdates.travelersRepo
   return travelersRepo.allTravelers.map(traveler => {
     let usersTrips = createUsersTrips(traveler)
@@ -201,9 +201,7 @@ const postTrip = (requestedTrip) => {
     })
   }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
-  const updatedUser = domUpdates.travelersRepo.getUserById(requestedTrip.userID)
   domUpdates.clearFormData()
-  // createUser(updatedUser)
 }
 
 const createViewTripListener = () => {
@@ -215,7 +213,6 @@ const createViewTripListener = () => {
 }
 
 const createSearchByUserListener = () => {
-  const userNameInput = document.querySelector('.user-name-input')
   const searchUserButton = document.querySelector('.search-user-button')
   searchUserButton.addEventListener('click', () => {
     getUserByName()
@@ -249,7 +246,7 @@ const upDateTripStatus = (newStatus, tripID) => {
     })
   }).then(response => console.log(response.json()))
     .catch(err => console.error(err.message))
-  domUpdates.closeRequestedTripPage(tripID)
+  domUpdates.closeRequestedTripPage()
 }
 
 const deleteTrip = (tripID) => {
@@ -291,17 +288,13 @@ const createCancelListeners = () => {
   requestedUserInfo.addEventListener('click', () => {
     domUpdates.cancelTrip()
     deleteTrip(cancelTripButton.id)
-    })
+  })
 }
 
 const createNewTrip = (requestedTrip) => {
   const destination = domUpdates.destinationsRepo.getDesiredDestination(requestedTrip.destinationID)
-  console.log(destination);
   requestedTrip.image = destination.image
   requestedTrip.alt = destination.alt
   requestedTrip.destinationName = destination.destination
   domUpdates.addNewRequestedTrip(requestedTrip)
 }
-
-//Get full trip
-//generate userTrips

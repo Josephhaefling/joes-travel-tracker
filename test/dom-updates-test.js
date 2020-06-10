@@ -17,13 +17,11 @@ describe('DomUpdates', () => {
   let tripRepo
   let travelersRepo
   let destinationsRepo
-  let Document = {}
 
   beforeEach(() => {
     global.domUpdates
     global.tripRepo
     global.document = {}
-    global.travelerPage
     travelersRepo = new TravelersRepo(TestData.sampleUsers)
     tripRepo = new TripRepo(TestData.sampleTrips)
     destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)
@@ -83,15 +81,4 @@ describe('DomUpdates', () => {
     domUpdates.getAllUserTrips(user.id)
     expect(domUpdates.displayTripsToDOM).to.have.been.called(1)
   })
-
-  it.skip('should be run getTripsRequestForm once', () => {
-    chai.spy.on(domUpdates, ['displayTripRequestForm'], () => {})
-    chai.spy.on(document, ['querySelector'], () => {})
-    chai.spy.on(travelerPage, ['insertAdjacentHTML'], () => {})
-    domUpdates.displayTotalSpent(user)
-    expect(domUpdates.displayTripRequestForm).to.have.been.called(1)
-  })
-
-
-
 })

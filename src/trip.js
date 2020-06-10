@@ -11,7 +11,7 @@ class Trip {
     this.flightCost = flightCost
     this.status = tripInfo.status,
     this.suggestedActivities = tripInfo.suggestedActivities
-    this.travelerName = travelerName
+    this.travelerName = travelerName || null
     this.image = destination.image || null,
     this.alt = destination.alt || null
   }
