@@ -111,7 +111,7 @@ class DomUpdates {
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend', `
     <section class="total-spent">
-      <p class="total">${totalSpent}</p>
+      <p class="total">Tou have spent $${totalSpent} with us.</p>
     <section>
     `)
     this.currentUser = currentUser
