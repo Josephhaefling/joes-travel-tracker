@@ -61,4 +61,8 @@ describe('Trip', () => {
     let tripList = tripRepo.getTripsByUserID(3)
     expect(tripRepo.getPendingTrips()).to.equal(undefined)
   })
+  
+  it('should be able to get a trip by its ID', () => {
+    expect(tripRepo.getTripByID(3)).to.deep.equal(tripRepo.trips[2])
+  })
 })

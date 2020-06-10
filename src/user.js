@@ -35,6 +35,10 @@ class User {
   return this.userTrips.filter(userTrip => userTrip.status === 'pending')
     }
   }
+
+  getTripByID(tripID) {
+    return this.userTrips.find(trip => trip.id === tripID)
+  }
 }
 
 
