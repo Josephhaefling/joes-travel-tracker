@@ -125,7 +125,7 @@ class DomUpdates {
     <h2>Request a New Trip</h2>
       <form class="trip-form">
       <p>Your Name:</p>
-      <input type="text" class="name" value="Sibby Dawidowitsch">
+      <input type="text" class="name">
       <p>Number of Travelers:</p>
       <select id="num-travelers">
       </select>
@@ -170,7 +170,7 @@ class DomUpdates {
     const agencyPage = document.querySelector('.agency-page')
     agencyPage.insertAdjacentHTML('beforeend', `
     <section class="user-search">
-    <input type="text" class="user-name-input" value="Sibby Dawidowitsch">
+    <input type="text" class="user-name-input">
     <button type="button" class="search-user-button">Search User</button>
     </section>
     <section class="pending-trips-display"></section>
