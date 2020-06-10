@@ -38,9 +38,9 @@ describe('User', () => {
     flightCost1 = destinationsRepo.getFlightCost(destination1, tripsData[2].travelers)
     flightCost2 = destinationsRepo.getFlightCost(destination1, tripsData[6].travelers)
     flightCost3 = destinationsRepo.getFlightCost(destination1, tripsData[7].travelers)
-    trip1 = new Trip(TestData.sampleTrips[2], lodgingCost1, flightCost1)
-    trip2 = new Trip(TestData.sampleTrips[6], lodgingCost2, flightCost2)
-    trip3 = new Trip(TestData.sampleTrips[7], lodgingCost3, flightCost3)
+    trip1 = new Trip(TestData.sampleTrips[2], lodgingCost1, flightCost1, '', '')
+    trip2 = new Trip(TestData.sampleTrips[6], lodgingCost2, flightCost2, '', '')
+    trip3 = new Trip(TestData.sampleTrips[7], lodgingCost3, flightCost3, '', '')
     userTrips = [trip1, trip2, trip3]
     user = new User(sampleUsers[2], destinationsRepo, userTrips)
     user1 = new User(sampleUsers[2], destinationsRepo, '')
@@ -84,6 +84,8 @@ describe('User', () => {
 
   it('should be able to get pendingTrips', () => {
     expect(user1.getPendingTrips()).to.deep.equal(undefined)
+  })
+
   it('should be able to get a users trip by id', () => {
     expect(user.getTripByID(7)).to.deep.equal(trip2)
   })

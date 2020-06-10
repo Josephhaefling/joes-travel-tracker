@@ -83,15 +83,4 @@ describe('DomUpdates', () => {
     domUpdates.getAllUserTrips(user.id)
     expect(domUpdates.displayTripsToDOM).to.have.been.called(1)
   })
-
-  it.skip('should be run getTripsRequestForm once', () => {
-    chai.spy.on(domUpdates, ['displayTripRequestForm'], () => {})
-    chai.spy.on(document, ['querySelector'], () => {})
-    chai.spy.on(travelerPage, ['insertAdjacentHTML'], () => {})
-    domUpdates.displayTotalSpent(user)
-    expect(domUpdates.displayTripRequestForm).to.have.been.called(1)
-  })
-
-
-
 })
