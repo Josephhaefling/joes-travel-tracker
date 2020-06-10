@@ -27,3 +27,8 @@ Local Server Instructions:
 - Webpack
 - Fetch API
 - ES Lint
+
+![login](https://user-images.githubusercontent.com/45408452/84219596-24574b00-aa8e-11ea-863a-e3d04e922bc8.gif)
+![approve-trip](https://user-images.githubusercontent.com/45408452/84220080-2f5eab00-aa8f-11ea-800e-62e827232505.gif)
+![login](https://user-images.githubusercontent.com/45408452/84220168-6d5bcf00-aa8f-11ea-8926-d247aaff7a32.gif)
+
