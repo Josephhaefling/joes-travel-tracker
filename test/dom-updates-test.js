@@ -17,13 +17,11 @@ describe('DomUpdates', () => {
   let tripRepo
   let travelersRepo
   let destinationsRepo
-  let Document = {}
 
   beforeEach(() => {
     global.domUpdates
     global.tripRepo
     global.document = {}
-    global.travelerPage
     travelersRepo = new TravelersRepo(TestData.sampleUsers)
     tripRepo = new TripRepo(TestData.sampleTrips)
     destinationsRepo = new DestinationsRepo(TestData.sampleDestinations)

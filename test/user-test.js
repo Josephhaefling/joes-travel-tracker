@@ -56,7 +56,6 @@ describe('User', () => {
   })
 
   it('should return NaN if a destination is not passed', () => {
-    const destination = user.destinationsRepo.getDesiredDestination(2)
     expect(user.getTotalCostOfTrip(10, 2)).to.deep.equal(NaN)
   })
 

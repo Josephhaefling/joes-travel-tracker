@@ -7,7 +7,6 @@ import TripRepo from '../src/trip-repo'
 import DestinationsRepo from '../src/destinations-repo'
 
 describe('Agency', () => {
-  let sampleUsers
   let destinationsRepo
   let tripRepo
   let destination1

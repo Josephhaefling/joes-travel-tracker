@@ -1,4 +1,4 @@
-SampleData = {
+const SampleData = {
   todaysDate: Date.now(),
   sampleUsers: [{
     "id": 1,

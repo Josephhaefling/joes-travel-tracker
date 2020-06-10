@@ -48,21 +48,21 @@ class DomUpdates {
   }
 
   getCompleteTrip(currentUser, trips) {
-    if(currentUser.userTrips){
+    if (currentUser.userTrips) {
       trips.forEach(trip => {
         const formattedTripDate = trip.date.split("/").join("-")
         const formattedTodaysDate = this.todaysDate.split("/").join("-")
         const tripDate = moment(formattedTripDate)
         const todaysDate = moment(formattedTodaysDate)
         const completeTrip = currentUser.getTripByID(trip.id)
-        const comparedDate =todaysDate.diff(tripDate)
+        const comparedDate = todaysDate.diff(tripDate)
         this.determineWhenIsTrip(completeTrip, comparedDate)
       })
     }
   }
 
   determineWhenIsTrip(completeTrip, comparedDate) {
-    if(completeTrip.status === 'pending') {
+    if (completeTrip.status === 'pending') {
       this.displayCompleteTripInfo(completeTrip, 'pending')
     } else if (comparedDate < 0) {
       this.displayCompleteTripInfo(completeTrip, 'future')
@@ -107,7 +107,6 @@ class DomUpdates {
   }
 
   displayTotalSpent(currentUser) {
-    console.log(currentUser);
     const totalSpent = currentUser.getTotalCostOfAllTrips()
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend', `
@@ -182,7 +181,6 @@ class DomUpdates {
     this.displayRevenue()
   }
 
-
   displayPendingTrips() {
     const pendingTripsDisplay = document.querySelector('.pending-trips-display')
     const pendingTrips = this.currentUser.getPendingTrips()
@@ -205,7 +203,7 @@ class DomUpdates {
     const totalRevenueDisplay = document.querySelector('.total-revenue-display')
     const totalRevenue = this.currentUser.getYearlyIncome()
     totalRevenueDisplay.insertAdjacentHTML('beforeend', `
-    <p>${totalRevenue}</p>
+    <p>Total Revenue: ${totalRevenue}</p>
     `)
     this.displayCurrentTravelers()
   }
@@ -254,13 +252,12 @@ class DomUpdates {
   }
 
   addNewPendingTrip() {
-    const pendingTrips = document.querySelector('.pending-trips')
     const pendingTripsText = document.querySelector('.pending-trips-text')
     const newText = parseInt(pendingTripsText.id) + 1
     pendingTripsText.innerText = `You have ${newText} pending trips.`
   }
 
-  displayRequestedTripCost(tripCost, trip) {
+  displayRequestedTripCost(tripCost) {
     const tripForm = document.querySelector('.trip-form')
     const confirmTripButton = document.querySelector('.confirm-trip-button')
     const requestTripButton = document.querySelector('.request-trip-button')
@@ -269,13 +266,6 @@ class DomUpdates {
     tripForm.insertAdjacentHTML('beforeend', `
     <p class="trip-cost">${tripCost}</p>
     `)
-  }
-
-  getFullTripInfo(userName, numTravelers, startDate, endDate, destination) {
-    const fullUserInfo = this.travelersRepo.getUserByName(userName)
-    const fullDestinationInfo = this.destinationsRepo.getDestinationByName(destination)
-    const costMetrics = this.generateCostMetrics(startDate, endDate, numTravelers, fullDestinationInfo)
-    return
   }
 
   generateCostMetrics(startDate, endDate, numTravelers, fullDestination) {
@@ -312,7 +302,7 @@ class DomUpdates {
      `)
   }
 
-  closeRequestedTripPage(requestedTripID) {
+  closeRequestedTripPage() {
     const requestedTrip = document.querySelector('.requested-trip')
     const agencyPage = document.querySelector('.agency-page')
     requestedTrip.classList.add('hide')
@@ -354,8 +344,7 @@ class DomUpdates {
 
   removeRequestedTrip() {
     const tripID = event.target.parentElement
-    const requestedTripID = `#${event.target.id}`
-    const tripInfoCard =`.${tripID.classList.value}`
+    const tripInfoCard = `.${tripID.classList.value}`
     const tripToHide = document.querySelector(tripInfoCard)
     tripToHide.classList.add('hide')
   }
