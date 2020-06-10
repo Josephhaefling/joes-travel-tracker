@@ -107,6 +107,7 @@ class DomUpdates {
   }
 
   displayTotalSpent(currentUser) {
+    console.log(currentUser);
     const totalSpent = currentUser.getTotalCostOfAllTrips()
     const travelerPage = document.querySelector('.traveler-page')
     travelerPage.insertAdjacentHTML('beforeend', `

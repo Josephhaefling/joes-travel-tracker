@@ -8,7 +8,9 @@ class User {
     this.destinationsRepo = destinationsRepository
   }
 
-  getTotalCostOfTrip(destination, numberOfDays, numberOfTravelers) {
+  getTotalCostOfTrip(destination, numDays, numTravelers) {
+    const numberOfDays = numDays || 1
+    const numberOfTravelers = numTravelers || 1
     const lodgingCost = this.destinationsRepo.getLodgingCost(destination, numberOfDays)
     const flightCost = this.destinationsRepo.getFlightCost(destination, numberOfTravelers)
     const lodgingPlusFee = lodgingCost * .10 + lodgingCost
@@ -17,15 +19,21 @@ class User {
   }
 
   getTotalCostOfAllTrips() {
+    if(this.userTrips) {
     return this.userTrips.reduce((totalSpent, trip) => {
       const tripCost = trip.getTripCost()
       totalSpent += tripCost
       return totalSpent
     }, 0)
+  } else {
+    return 0
+  }
   }
 
   getPendingTrips() {
-    return this.userTrips.filter(userTrip => userTrip.status === 'pending')
+    if (this.userTrips) {
+  return this.userTrips.filter(userTrip => userTrip.status === 'pending')
+    }
   }
 
   getTripByID(tripID) {
